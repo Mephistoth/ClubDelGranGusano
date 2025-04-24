@@ -1,0 +1,17 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Club del Gran Gusano</title>
+</head>
+<body>
+    <h1>Bienvenido al Club del Gran Gusano</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hola, {{ user.username }} | <a href="{% url 'account_logout' %}">Cerrar sesión</a></p>
+    {% else %}
+        <p><a href="{% url 'account_login' %}">Iniciar sesión</a> | <a href="{% url 'account_signup' %}">Registrarse</a></p>
+    {% endif %}
+</body>
+</html>

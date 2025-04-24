@@ -1,0 +1,18 @@
+# Python
+*.pyc
+__pycache__/
+
+# Entorno virtual
+venv/
+
+# SQLite database
+*.sqlite3
+
+# Archivos locales
+.env
+
+# Archivos del sistema operativo
+.DS_Store
+
+# Archivos de Django
+db.sqlite3
