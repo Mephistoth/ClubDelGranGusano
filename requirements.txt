@@ -1,0 +1,7 @@
+django-bootstrap-v5
+django-crispy-forms
+crispy-bootstrap4
+requests
+django-simple-captcha
+django-recaptcha
+Pillow 

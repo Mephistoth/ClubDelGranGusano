@@ -1,0 +1,19 @@
+1)set-executionpolicy remotesigned
+2)python -m venv myvenv
+3)ls
+4)cd myvenv
+5)cd Scripts
+6)./activate
+7)cd..
+8)cd..
+9)pip install -r requirements.txt
+10)python manage.py runserver
+
+--!no usar!
+9)pip install django-bootstrap-v5
+10)pip install django-crispy-forms
+11)pip install crispy-bootstrap4
+12)pip install requests
+13)pip install django-simple-captcha
+14)pip install django-recaptcha
+15) pip install Pillow 
