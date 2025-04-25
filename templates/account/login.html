@@ -1,17 +1,28 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Iniciar Sesión</title>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
 </head>
 <body>
-  <h2>Login</h2>
-  <form method="POST" action="{% url 'account_login' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
+    <h2>Iniciar Sesión</h2>
+
+    <form method="POST" action="{% url 'account_login' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Entrar</button>
   </form>
-  <p><a href="{% url 'account_reset_password' %}">¿Olvidaste tu contraseña?</a></p>
-  <p>¿No tienes cuenta? <a href="{% url 'account_signup' %}">Regístrate</a></p>
+
+    {% if form.non_field_errors %}
+   <div style="color: red;">
+       {% for error in form.non_field_errors %}
+           <p>{{ error }}</p>
+       {% endfor %}
+   </div>
+    {% endif %}
+
+    <p><a href="{% url 'account_reset_password' %}">¿Olvidaste tu contraseña?</a></p>
+    <p>¿No tienes cuenta? <a href="{% url 'account_signup' %}">Regístrate</a></p>
 </body>
 </html>
