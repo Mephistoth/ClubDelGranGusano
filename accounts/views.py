@@ -8,17 +8,17 @@ def home(request):
 # Vista para el login personalizado
 def custom_login(request):
     if request.method == 'POST':
-        form = CustomLoginForm(request.POST)  # Asegúrate de que este es tu formulario de login
+        # 1) Pasar request y data para que AuthenticationForm valide
+        form = CustomLoginForm(request, data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
-            if user is not None and user.is_active:
-                login(request, user)  # Inicia sesión
-                return redirect('home')  # Redirige al home
-            else:
-                form.add_error(None, 'El correo o la contraseña no son correctos.')
+            # 2) get_user() devuelve el User autenticado
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+        # 3) si falla, re-render con error
+        form.add_error(None, 'El correo o la contraseña no son correctos.')
     else:
-        form = CustomLoginForm()  # Si es un GET, mostramos el formulario vacío
+        # Siempre pasar request a AuthenticationForm
+        form = CustomLoginForm(request)
 
     return render(request, 'account/login.html', {'form': form})
