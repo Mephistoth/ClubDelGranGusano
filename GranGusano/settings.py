@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'GranGusano.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Club_Gran_Gusano',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'felipe98',
         'HOST': 'localhost',
@@ -112,10 +112,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
+AUTHENTICATION_BACKENDS = [
+     # Backend de allauth para login por email
+     'allauth.account.auth_backends.AuthenticationBackend',
+     # Backend estándar, para admin / username
+     'django.contrib.auth.backends.ModelBackend',
+ ]
 
 
 # Internationalization
