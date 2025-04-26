@@ -4,7 +4,7 @@ from accounts.views import home, custom_login  # Asegúrate de importar custom_l
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),  # Las rutas de allauth
-    path('login/', custom_login, name='account_login'),  # Agregamos la ruta de login personalizado
+    path('accounts/login/', custom_login, name='account_login'),  # Las rutas de allauth
+    path('accounts/', include('allauth.urls')),  # Agregamos la ruta de login personalizado
     path('', home, name='home'),  # La ruta para la página de inicio
 ]
