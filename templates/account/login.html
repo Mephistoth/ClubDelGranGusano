@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
+<div class="container">
     <h2>Iniciar Sesión</h2>
 
     <form method="POST" action="{% url 'account_login' %}">
@@ -24,5 +26,6 @@
 
     <p><a href="{% url 'account_reset_password' %}">¿Olvidaste tu contraseña?</a></p>
     <p>¿No tienes cuenta? <a href="{% url 'account_signup' %}">Regístrate</a></p>
+</div>
 </body>
 </html>
