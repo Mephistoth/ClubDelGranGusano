@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+</head>
+<body>
+    <h1>Perfil de {{ user.username }}</h1>
+
+    <div class="perfil-container">
+        <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+        <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
+        <a href="{% url 'editar_perfil' %}">Editar Perfil</a> 
+    </div>
+
+    <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
+</body>
+</html>

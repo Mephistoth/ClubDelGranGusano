@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm, UserCreationForm
+from django.contrib.auth.models import User
 
 class CustomLoginForm(AuthenticationForm):
      username = forms.EmailField(
@@ -18,3 +19,40 @@ class CustomLoginForm(AuthenticationForm):
             'autocomplete': 'current-password',
         })
      )
+
+
+class PerfilForm(forms.ModelForm):
+    # Añadimos los campos para la edición del perfil
+    username = forms.CharField(max_length=150,label="Nombre de usuario",required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(max_length=30, label="Nombre", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(max_length=30, label="Apellido", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label="Correo electrónico", widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    
+    # Campos para cambiar la contraseña
+    password1 = forms.CharField(
+        label="Contraseña nueva",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+    password2 = forms.CharField(
+        label="Confirmar contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+
+    class Meta:
+        model = User
+        fields = ['username','first_name', 'last_name', 'email']
+
+    # Validación para la contraseña
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if password1 and password1 != password2:
+            self.add_error('password2', 'Las contraseñas no coinciden.')
+        
+        return cleaned_data
+
+

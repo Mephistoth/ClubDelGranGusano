@@ -3,12 +3,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Inicio - Club del Gran Gusano</title>
+    <title>Editar Perfil</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
-
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-logo">
@@ -16,14 +14,8 @@
             </div>
             <div class="navbar-links">
                 {% if user.is_authenticated %}
-                    <!-- Usuario Dropdown -->
-                    <div class="navbar-dropdown">
-                        <button class="navbar-user">{{ user.username }}</button>
-                        <div class="dropdown-content">
-                            <a href="{% url 'perfil' %}">Mi Perfil</a>
-                            <a href="{% url 'account_logout' %}">Cerrar sesión</a>
-                        </div>
-                    </div>
+                    <span>Hola, {{ user.username }}</span>
+                    <a href="{% url 'account_logout' %}">Cerrar sesión</a>
                 {% else %}
                     <a href="{% url 'account_login' %}">Iniciar sesión</a>
                     <a href="{% url 'account_signup' %}">Registrarse</a>
@@ -31,6 +23,15 @@
             </div>
         </div>
     </nav>
-
+    
+    <main>
+        <h2>Editar Perfil</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Guardar Cambios</button>
+        </form>
+        <a href="{% url 'perfil' %}">Cancelar</a>  <!-- Added cancel link -->
+    </main>
 </body>
 </html>
