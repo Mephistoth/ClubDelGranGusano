@@ -1,0 +1,23 @@
+{% load static %}
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <h2>Club del Gran Gusano</h2>
+        </div>
+        <div class="navbar-links">
+            {% if user.is_authenticated %}
+                <div class="navbar-dropdown">
+                    <button class="navbar-user">{{ user.username }}</button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'perfil' %}">Mi Perfil</a>
+                        <a href="{% url 'account_logout' %}">Cerrar sesión</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'account_login' %}">Iniciar sesión</a>
+                <a href="{% url 'account_signup' %}">Registrarse</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
