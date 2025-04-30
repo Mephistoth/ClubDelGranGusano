@@ -46,3 +46,7 @@ def editar_perfil(request):
         form = PerfilForm(instance=request.user)
     
     return render(request, 'account/editar_perfil.html', {'form': form})
+
+@login_required
+def home(request):
+    return render(request, 'home.html')
