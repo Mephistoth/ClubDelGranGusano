@@ -47,6 +47,3 @@ def editar_perfil(request):
     
     return render(request, 'account/editar_perfil.html', {'form': form})
 
-@login_required
-def home(request):
-    return render(request, 'home.html')
