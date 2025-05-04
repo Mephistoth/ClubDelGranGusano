@@ -6,16 +6,58 @@
     <meta charset="UTF-8">
     <title>Inicio - Club del Gran Gusano</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
 </head>
 <body>
-
     <!-- Aquí se incluye el navbar en cada página donde lo necesites -->
     {% include 'account/navbar.html' %}
-
-
     <!-- El contenido de la página -->
     <h1>Bienvenido al Club del Gran Gusano</h1>
     <p>Esta es la página de inicio.</p>
+
+    {% if user.is_authenticated %}
+        <button class="chat-toggle-btn" onclick="toggleChat()">Chat</button>
+
+         <!-- Contenedor del chat -->
+         <div id="chatContainer" class="chat-container">
+            <div class="chat-header">
+                Chat en Vivo
+                <button style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;" onclick="toggleChat()">&times;</button>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <!-- Aquí irán los mensajes dinámicos -->
+            </div>
+            <div class="chat-footer">
+                <form id="chatForm" onsubmit="sendMessage(event)">
+                    <input type="text" id="chatMessage" placeholder="Escribe un mensaje..." style="width: 80%;" required>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script>
+        function toggleChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.classList.toggle('open');
+        }
+
+        function sendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatMessage');
+            const message = input.value.trim();
+            if (message) {
+                const chatBody = document.getElementById('chatBody');
+                const msgElement = document.createElement('div');
+                msgElement.textContent = "Tú: " + message;
+                msgElement.style.padding = "5px 0";
+                chatBody.appendChild(msgElement);
+                input.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }
+    </script>
 
 </body>
 </html>

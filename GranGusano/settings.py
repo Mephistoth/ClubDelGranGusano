@@ -44,8 +44,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    #apartes
+    'channels',
+
     #app
     'accounts',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -161,4 +165,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'clubdelgrangusanoweb@gmail.com'
 EMAIL_HOST_PASSWORD = 'kqjk eoxk ulfk vfmc'
+
+#Respecto al chat
+ASGI_APPLICATION = 'GranGusano.asgi.application'
 
