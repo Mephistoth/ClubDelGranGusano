@@ -21,14 +21,6 @@ class CustomSignupForm(SignupForm):
         return user
 
 class CustomLoginForm(AuthenticationForm):
-     username = forms.EmailField(
-         label="Correo Electrónico",
-
-        widget=forms.EmailInput(attrs={
-            'placeholder': 'Correo electrónico',
-            'autocomplete': 'email',
-        })
-     )
      password = forms.CharField(
          label="Contraseña",
 
@@ -44,7 +36,7 @@ class PerfilForm(forms.ModelForm):
     # username = forms.CharField(max_length=150,label="Nombre de usuario",required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(max_length=30, label="Nombre", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=30, label="Apellido", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(label="Correo electrónico", widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    
     
     # Campos para cambiar la contraseña
     password1 = forms.CharField(
