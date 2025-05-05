@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
 </head>
 <body>
-    <h1>Perfil de {{ user.username }}</h1>
+    <h1>Perfil de {{ user.first_name }}</h1>
 
     <div class="perfil-container">
         <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
