@@ -15,7 +15,7 @@
             </div>
             <div class="navbar-links">
                 {% if user.is_authenticated %}
-                    <span>Hola, {{ user.username }}</span>
+                    <span>Hola, {{ user.first_name }}</span>
                     <a href="{% url 'account_logout' %}">Cerrar sesión</a>
                 {% else %}
                     <a href="{% url 'account_login' %}">Iniciar sesión</a>
