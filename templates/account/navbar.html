@@ -8,7 +8,13 @@
         <div class="navbar-links">
             {% if user.is_authenticated %}
                 <div class="navbar-dropdown">
-                    <button class="navbar-user">{{ user.username }}</button>
+                    <button class="navbar-user">
+                        {% if user.first_name %}
+                        {{ user.first_name }}
+                        {% else %}
+                        {{ user.email|slice:":user.email.index('@')" }}
+                        {% endif %}
+                    </button>
                     <div class="dropdown-content">
                         <a href="{% url 'perfil' %}">Mi Perfil</a>
                         <a href="{% url 'account_logout' %}">Cerrar sesión</a>
