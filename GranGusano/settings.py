@@ -49,7 +49,10 @@ INSTALLED_APPS = [
 
     #app
     'accounts',
+    'chatbotcito',
     'chat',
+    
+    
 ]
 
 MIDDLEWARE = [
@@ -168,6 +171,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'clubdelgrangusanoweb@gmail.com'
 EMAIL_HOST_PASSWORD = 'kqjk eoxk ulfk vfmc'
 
-#Respecto al chat
 ASGI_APPLICATION = 'GranGusano.asgi.application'
-
+CHANNEL_LAYERS = {
+   "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}

@@ -7,12 +7,16 @@
         </div>
         <div class="navbar-links">
             {% if user.is_authenticated %}
+                <!-- Link al Chat -->
+                <a href="{% url 'chat' %}" class="navbar-link">Chat</a>
+
+                <!-- Menú desplegable de usuario -->
                 <div class="navbar-dropdown">
                     <button class="navbar-user">
                         {% if user.first_name %}
-                        {{ user.first_name }}
+                            {{ user.first_name }}
                         {% else %}
-                        {{ user.email|slice:":user.email.index('@')" }}
+                            {{ user.email|slice:":user.email.index('@')" }}
                         {% endif %}
                     </button>
                     <div class="dropdown-content">

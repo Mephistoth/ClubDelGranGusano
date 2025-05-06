@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
 
 import os
 from django.core.asgi import get_asgi_application
-from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import chat.routing
+from channels.auth import AuthMiddlewareStack
+import chatchito.routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GranGusano.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ClubDelGranGusano.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
@@ -23,4 +23,3 @@ application = ProtocolTypeRouter({
         )
     ),
 })
-
