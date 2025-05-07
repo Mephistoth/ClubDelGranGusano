@@ -1,12 +1,19 @@
 body {
     background: #FFF5E1;
-background: linear-gradient(0deg,rgba(255, 245, 225, 1) 0%, rgba(232, 244, 184, 1) 100%);
+    background: linear-gradient(0deg,rgba(255, 245, 225, 1) 0%, rgba(232, 244, 184, 1) 100%);
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
   
   .card {
@@ -23,14 +30,9 @@ background: linear-gradient(0deg,rgba(255, 245, 225, 1) 0%, rgba(232, 244, 184, 
     margin-bottom: 1.5rem;
   }
   
-  .card form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
   
   .card button {
-    background-color: #007bff;
+    background-color: #000000; 
     color: white;
     padding: 0.5rem;
     border: none;
@@ -42,7 +44,7 @@ background: linear-gradient(0deg,rgba(255, 245, 225, 1) 0%, rgba(232, 244, 184, 
     color: #007bff;
     text-decoration: none;
   }
-  
+
   .card p {
     margin-top: 1rem;
   }
