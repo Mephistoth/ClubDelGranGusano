@@ -10,6 +10,12 @@
     <h1>Perfil de {{ user.first_name }}</h1>
 
     <div class="perfil-container">
+        {% if user.profile.foto %}
+            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="foto-perfil">
+        {% else %}
+            <img src="{% static 'img/default-user.png' %}" alt="Foto por defecto" class="foto-perfil">
+        {% endif %}
+        <h2>Información del Usuario</h2>
         <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
         <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
         <a href="{% url 'editar_perfil' %}">Editar Perfil</a> 

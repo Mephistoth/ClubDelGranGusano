@@ -5,7 +5,16 @@
     <meta charset="UTF-8">
     <title>Editar Perfil</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <style>
+        .foto-perfil {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -27,12 +36,20 @@
     
     <main>
         <h2>Editar Perfil</h2>
-        <form method="POST">
+
+        {% if user.profile.foto %}
+            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="foto-perfil">
+        {% else %}
+            <p>No has subido una foto de perfil.</p>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Guardar Cambios</button>
         </form>
-        <a href="{% url 'perfil' %}">Cancelar</a>  <!-- Added cancel link -->
+
+        <a href="{% url 'perfil' %}">Cancelar</a>
     </main>
 </body>
 </html>

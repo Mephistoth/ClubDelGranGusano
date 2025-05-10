@@ -33,13 +33,14 @@ def perfil_usuario(request):
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
-        form = PerfilForm(request.POST, instance=request.user)
+        form = PerfilForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
             password1 = form.cleaned_data.get('password1')
             if password1:
                 user.set_password(password1)  # Cambiar la contraseña
             user.save()
+            form.save()
             update_session_auth_hash(request, user)  # Mantener al usuario autenticado después de cambiar la contraseña
             return redirect('perfil')  # Redirigir al perfil después de editarlo
     else:

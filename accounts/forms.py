@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm, UserCreationForm
 from django.contrib.auth.models import User
 from allauth.account.forms import SignupForm
+from .models import Profile
 
 class CustomSignupForm(SignupForm):
     first_name = forms.CharField(
@@ -50,6 +51,9 @@ class PerfilForm(forms.ModelForm):
         required=False
     )
 
+    # Campo para la foto de perfil
+    foto = forms.ImageField(label='Foto de perfil', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = User
         # fields = ['username','first_name', 'last_name', 'email']
@@ -65,5 +69,23 @@ class PerfilForm(forms.ModelForm):
             self.add_error('password2', 'Las contraseñas no coinciden.')
         
         return cleaned_data
+
+    def save(self, commit=True):
+         # Guardar el usuario
+        user = super().save(commit=commit)
+        # Guardar la foto de perfil
+        foto = self.cleaned_data.get('foto')
+
+        if foto:
+            # Asegúrate de que el perfil del usuario existe
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.foto = foto
+            profile.save()
+
+        if self.cleaned_data.get('password1'):
+            user.set_password(self.cleaned_data.get('password1'))
+            user.save()
+
+        return user
 
 
