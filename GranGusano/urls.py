@@ -4,6 +4,8 @@ from accounts.views import home, custom_login, perfil_usuario, editar_perfil  # 
 from django.conf import settings
 from django.conf.urls.static import static
 
+from chat import views as chat_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,7 +15,8 @@ urlpatterns = [
     path('perfil/editar/', editar_perfil, name='editar_perfil'),  # Ruta para la vista de editar perfil de usuario
     path('', home, name='home'),  # Ruta para la página de inicio  
     path('chatbot/', include('chatbotcito.urls')),  # Ruta para las vistas de chatbotcito
-    path('chat/', include('chat.urls')),  # Ruta para las vistas de chat
+    path('chat/', chat_views.chat_room, name='chat'),
+    
   
 ]
 

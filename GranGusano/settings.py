@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'chatbotcito',
     'chat',
+    
     
     
 ]
@@ -172,10 +174,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'clubdelgrangusanoweb@gmail.com'
 EMAIL_HOST_PASSWORD = 'kqjk eoxk ulfk vfmc'
 
-ASGI_APPLICATION = 'GranGusano.asgi.application'
+ASGI_APPLICATION = "GranGusano.asgi.application"
 CHANNEL_LAYERS = {
-   "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # ③ Capa en memoria
     },
 }
 

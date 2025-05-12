@@ -3,3 +3,6 @@ psycopg2-binary
 django-allauth
 channels
 Pillow
+daphne
+channels-redis
+redis

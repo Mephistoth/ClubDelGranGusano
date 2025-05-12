@@ -8,4 +8,6 @@ def crear_o_actualizar_perfil(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     else:
-        instance.profile.save()
+        # Asegura que el perfil exista y luego guárdalo
+        profile, _ = Profile.objects.get_or_create(user=instance)
+        profile.save()
