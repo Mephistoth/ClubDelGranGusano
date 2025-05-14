@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/logout.css' %}">
+
+{% block content %}
+<div class="card">
+    <h2 class="card-title">{% trans "¿Seguro que deseas cerrar sesión?" %}</h2>
+    <p>{% trans "Gracias por visitar el Club del Gran Gusano." %}</p>
+
+    <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <div class="btn-group" style="margin-top: 20px;">
+            <!-- Botón que envía el formulario (cierra sesión) -->
+            <button type="submit" class="btn btn-primary">{% trans "Cerrar sesión" %}</button>
+
+            <!-- Botón que redirige sin enviar el formulario -->
+            <button type="button" class="btn btn-secondary" data-url="{% url 'home' %}" onclick="window.location.href=this.dataset.url">
+                 {% trans "Volver" %}
+            </button>
+
+        </div>
+    </form>
+
+</div>
+{% endblock %}
