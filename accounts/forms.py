@@ -87,5 +87,3 @@ class PerfilForm(forms.ModelForm):
             user.save()
 
         return user
-
-
