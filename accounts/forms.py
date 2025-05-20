@@ -1,45 +1,34 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm, UserCreationForm
 from django.contrib.auth.models import User
-from allauth.account.forms import SignupForm
+from allauth.account.forms import LoginForm
+from allauth.account.models import EmailAddress
 from .models import Profile
 
-class CustomSignupForm(SignupForm):
-    first_name = forms.CharField(
-        max_length=30,
-        label="Nombre",
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Tu nombre'
-        })
-    )
-    
-    def save (self, request):
-        user = super().save(request)
-        user.first_name = self.cleaned_data ['first_name']
-        user.save()
-        return user
-
-class CustomLoginForm(AuthenticationForm):
-     password = forms.CharField(
-         label="Contraseña",
-
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Contraseña',
-            'autocomplete': 'current-password',
-        })
-     )
 
 
+# FORMULARIO PERSONALIZADO DE LOGIN
+class CustomLoginForm(LoginForm):
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)  # mantiene validaciones internas de allauth
+
+        verified = EmailAddress.objects.filter(
+            user=user,
+            primary=True,
+            verified=True
+        ).exists()
+
+        if not verified:
+            raise forms.ValidationError(
+                "Debes verificar tu correo antes de iniciar sesión.",
+                code='email_not_verified'
+            )
+
+
+# FORMULARIO DE PERFIL DE USUARIO (sin cambios)
 class PerfilForm(forms.ModelForm):
-    # Añadimos los campos para la edición del perfil
-    # username = forms.CharField(max_length=150,label="Nombre de usuario",required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(max_length=30, label="Nombre", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=30, label="Apellido", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     
-    
-    # Campos para cambiar la contraseña
     password1 = forms.CharField(
         label="Contraseña nueva",
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
@@ -51,15 +40,12 @@ class PerfilForm(forms.ModelForm):
         required=False
     )
 
-    # Campo para la foto de perfil
     foto = forms.ImageField(label='Foto de perfil', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        # fields = ['username','first_name', 'last_name', 'email']
         fields = ['first_name', 'last_name']
 
-    # Validación para la contraseña
     def clean(self):
         cleaned_data = super().clean()
         password1 = cleaned_data.get('password1')
@@ -71,13 +57,10 @@ class PerfilForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-         # Guardar el usuario
         user = super().save(commit=commit)
-        # Guardar la foto de perfil
         foto = self.cleaned_data.get('foto')
 
         if foto:
-            # Asegúrate de que el perfil del usuario existe
             profile, created = Profile.objects.get_or_create(user=user)
             profile.foto = foto
             profile.save()
