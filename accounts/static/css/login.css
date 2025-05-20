@@ -6,13 +6,17 @@ html, body {
 
 body {
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    height: 100vh; /* 100% de la altura de la pantalla */
-    background-image: url('../img/Fondo_Login.jpg');
-    background-repeat: repeat;
-    background-size: 100px 100px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('../img/Fondo_Login.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
+
 
 .container {
     background-color: white;
