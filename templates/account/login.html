@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -10,36 +9,30 @@
 <body>
 <div class="container">
     <h2>Iniciar Sesión</h2>
-
-    <form method="POST" action="{% url 'account_login' %}">
-      {% csrf_token %}
-      
-      <label  for="{{ form.login.id_for_label }}">{{ form.login.label }}</label>
-      {{ form.login }}
-
-      <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-      {{ form.password }}
-
-      <button type="submit">Entrar</button>
-
-      <a href="{% url 'home' %}" style="color: blue; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
-          Ingresar como invitado
-      </a>
-    </form>
-
-    {% if form.non_field_errors %}
-    <div style="color: red;">
+        {% if form.non_field_errors %}
+   <div style="color: red;">
        {% for error in form.non_field_errors %}
            <p>{{ error }}</p>
        {% endfor %}
-    </div>
+   </div>
     {% endif %}
 
-    <p>¿No tienes cuenta? <a href="{% url 'account_signup' %}">Regístrate</a></p>
-    <p><a href="{% url 'account_reset_password' %}">¿Olvidaste tu contraseña?</a></p>
+<form method="POST" action="{% url 'account_login' %}">
+    {% csrf_token %}
 
+    <label for="{{ form.login.id_for_label }}">{{ form.login.label }}</label>
+    {{ form.login }}
+
+    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+    {{ form.password }}
+
+ 
+
+    <button type="submit">Entrar</button>
+    <a href="{% url 'home' %}">Ingresar como invitado</a>
+</form>
+    <p><a href="{% url 'account_reset_password' %}">¿Olvidaste tu contraseña?</a></p>
+    <p>¿No tienes cuenta? <a href="{% url 'account_signup' %}">Regístrate</a></p>
 </div>
 </body>
 </html>
-
-   
