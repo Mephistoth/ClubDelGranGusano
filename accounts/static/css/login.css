@@ -35,9 +35,13 @@ h2 {
 form {
     display: flex;
     flex-direction: column;
+       padding: 0;
+    margin: 0;
+
 }
 
 form input, form select, form textarea {
+      box-sizing: border-box;
     width: 100%;
     padding: 12px;
     margin: 10px 0;
