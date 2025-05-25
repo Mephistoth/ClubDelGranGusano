@@ -4,7 +4,7 @@ from accounts.views import home, perfil_usuario, editar_perfil
 from django.conf import settings
 from django.conf.urls.static import static
 from chat import views as chat_views
-
+from videollamada import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('chatbot/', include('chatbotcito.urls')),
     path('chat/', chat_views.chat_room, name='chat'),
+     path('videollamada/<str:room_name>/', views.videollamada_room, name='videollamada_room'),
 ]
 
 if settings.DEBUG:

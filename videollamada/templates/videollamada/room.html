@@ -1,0 +1,26 @@
+<!-- templates/videollamada/room.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Videollamada - {{ room_name }}</title>
+    <style>
+        video {
+            width: 48%;
+            margin: 10px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Sala de videollamada: {{ room_name }}</h2>
+
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
+    {% load static %}
+    <script src="{% static 'videollamada/webrtc.js' %}"></script>
+</body>
+</html>

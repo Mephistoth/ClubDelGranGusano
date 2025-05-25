@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'chatbotcito',
     'chat',
-    
-    
+    'videollamada', 
+     
     
 ]
 
@@ -144,7 +144,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
+# Directorio donde collectstatic guardará los archivos (solo en producción)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Carpetas adicionales donde buscar archivos estáticos (desarrollo local)
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Carpeta global de estáticos (opcional pero útil)
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -181,7 +190,10 @@ EMAIL_HOST_PASSWORD = 'kqjk eoxk ulfk vfmc'
 ASGI_APPLICATION = "GranGusano.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",  # ③ Capa en memoria
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],  # Puerto de Redis donde estoy probando la conexion de videollamadas
+        },
     },
 }
 
