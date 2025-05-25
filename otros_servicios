@@ -1,0 +1,6 @@
+ejecutar estos comandos(importante instalar docker)
+1)abrir en la carpeta del proyecto powershell (por ejemplo "C:\Users\felip\OneDrive\Escritorio\ClubDelGranGusano")
+2)$env:DJANGO_SETTINGS_MODULE="GranGusano.settings"
+3)Start-Process powershell -ArgumentList 'daphne -p 8000 GranGusano.asgi:application'
+4)Start-Process powershell -ArgumentList 'docker run -p 6379:6379 redis'
+5)ejecutar desde vsc python manage.py runserver 8001
