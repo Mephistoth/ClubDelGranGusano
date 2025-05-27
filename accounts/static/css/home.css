@@ -62,3 +62,32 @@ main {
     text-align: center;
     padding: 10px 0;
 }
+
+/* Ajuste del dropdown para que no expanda la navbar */
+.navbar-dropdown {
+  position: relative;  /* punto de referencia para el posicionamiento absoluto */
+}
+
+.dropdown-content {
+  position: absolute;  /* saca el dropdown del flujo normal */
+  top: 100%;           /* justo debajo del botón */
+  right: 0;            /* alineado al borde derecho del botón */
+  display: none;       /* sigue oculto por defecto */
+  /* opcional: ajustar ancho para que no quede muy grande */
+  min-width: 160px;
+}
+
+/* Mostrar cuando hacemos hover */
+.navbar-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Icono circular en navbar */
+.navbar-logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+}
