@@ -1,53 +1,71 @@
-<!-- chat/templates/chat/chat.html -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Chat Único</title>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Chat Comunitario{% endblock %}
+
+{% block extra_css %}
   <style>
-    .chat-body { 
-      height: 300px; 
-      overflow-y: auto; 
-      border: 1px solid #ccc; 
-      padding: 5px; 
+    /* Sólo aplicará dentro de esta página de chat */
+    .chat-container {
+      max-width: 600px;
+      margin: 1rem auto;
+    }
+    .chat-body {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 5px;
       margin-bottom: 1rem;
     }
-    form { display: flex; gap: .5rem; }
-    input { flex: 1; padding: .5rem; }
-    button { padding: .5rem 1rem; }
+    .chat-form {
+      display: flex;
+      gap: .5rem;
+    }
+    .chat-form input {
+      flex: 1;
+      padding: .5rem;
+    }
+    .chat-form button {
+      padding: .5rem 1rem;
+    }
   </style>
-</head>
-<body>
-  <div id="chatBody" class="chat-body">
-    {% for msg in messages %}
-      <div>
-        <strong>
-          {{ msg.user.first_name|default:msg.user.username|default:"Invitado" }}:
-        </strong>
-        {{ msg.content }}
-      </div>
-    {% empty %}
-      <div><em>No hay mensajes aún.</em></div>
-    {% endfor %}
+{% endblock %}
+
+{% block content %}
+  <div class="chat-container">
+    <div id="chatBody" class="chat-body">
+      {% for msg in messages %}
+        <div>
+          <strong>
+            {{ msg.user.first_name|default:msg.user.username|default:"Invitado" }}:
+          </strong>
+          {{ msg.content }}
+        </div>
+      {% empty %}
+        <div><em>No hay mensajes aún.</em></div>
+      {% endfor %}
+    </div>
+
+    <form id="chatForm" class="chat-form" onsubmit="sendMessage(event);">
+      {% if user.is_authenticated %}
+        <input id="chatMessage" required autocomplete="off" placeholder="Escribe tu mensaje…">
+        <button type="submit">Enviar</button>
+      {% else %}
+        <input disabled placeholder="Solo lectura para invitados">
+        <button disabled>Enviar</button>
+      {% endif %}
+    </form>
   </div>
+{% endblock %}
 
-  <form id="chatForm" onsubmit="sendMessage(event);">
-    {% if user.is_authenticated %}
-      <input id="chatMessage" required autocomplete="off" placeholder="Escribe tu mensaje...">
-      <button type="submit">Enviar</button>
-    {% else %}
-      <input disabled placeholder="Solo lectura para invitados">
-      <button disabled>Enviar</button>
-    {% endif %}
-  </form>
-
+{% block extra_js %}
   <script>
     const chatSocket = new WebSocket(
       (location.protocol === "https:" ? "wss://" : "ws://")
       + window.location.host + "/ws/chat/"
     );
 
-    chatSocket.onmessage = function(e) {
+    chatSocket.onmessage = e => {
       const { user, message } = JSON.parse(e.data);
       const chatBody = document.getElementById('chatBody');
       const div = document.createElement('div');
@@ -56,9 +74,7 @@
       chatBody.scrollTop = chatBody.scrollHeight;
     };
 
-    chatSocket.onclose = function(e) {
-      console.error('Chat cerrado inesperadamente');
-    };
+    chatSocket.onclose = () => console.error('Chat cerrado inesperadamente');
 
     function sendMessage(e) {
       e.preventDefault();
@@ -69,5 +85,4 @@
       input.value = '';
     }
   </script>
-</body>
-</html>
+{% endblock %}
