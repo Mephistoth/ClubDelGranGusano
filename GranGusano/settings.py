@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+
+TIME_ZONE = 'America/Santiago'
+USE_TZ = True  # Usa zonas horarias conscientes (manténlo activado)
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -53,6 +58,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'chatbotcito',
     'chat',
+    'videollamadas',
     
     
     
@@ -189,3 +195,8 @@ CHANNEL_LAYERS = {
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# subir esto si o si
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
