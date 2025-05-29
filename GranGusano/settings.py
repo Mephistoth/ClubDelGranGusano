@@ -59,9 +59,7 @@ INSTALLED_APPS = [
     'chatbotcito',
     'chat',
     'videollamadas',
-    
-    
-    
+    'blogs',
 ]
 
 MIDDLEWARE = [

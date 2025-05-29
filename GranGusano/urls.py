@@ -15,6 +15,7 @@ urlpatterns = [
     path('chatbot/', include('chatbotcito.urls')),
     path('chat/', chat_views.chat_room, name='chat'),
     path('videollamadas/', include('videollamadas.urls')),
+    path('blogs/', include('blogs.urls')),
 ]
 
 if settings.DEBUG:
