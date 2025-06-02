@@ -6,3 +6,4 @@ Pillow
 daphne
 channels-redis
 redis
+django-ckeditor

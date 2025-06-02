@@ -2,14 +2,16 @@
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Inicio - Club del Gran Gusano</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/chatbotcito.css' %}">
 </head>
+
 <body>
-    
+
     <!-- Aquí se incluye el navbar en cada página donde lo necesites -->
     {% include 'account/navbar.html' %}
 
@@ -23,7 +25,8 @@
     <div id="chatContainer" class="chat-container">
         <div class="chat-header">
             Chatbot
-            <button style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;" onclick="toggleChat()">&times;</button>
+            <button style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;"
+                onclick="toggleChat()">&times;</button>
         </div>
         <div class="chat-body" id="chatBody"></div>
         <div class="chat-footer">
@@ -33,82 +36,84 @@
             </form>
         </div>
     </div>
-{% endif %}
+    {% endif %}
 
 
-<script>
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function toggleChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            const chatBody = document.getElementById('chatBody');
+            chatContainer.classList.toggle('open');
+
+            if (chatContainer.classList.contains('open')) {
+                // Mostrar bienvenida solo si está vacío
+                if (!chatBody.innerHTML) {
+                    const welcomeMsg = document.createElement('div');
+                    welcomeMsg.textContent = "Bot: ¡Hola! Pregúntame lo que quieras sobre lombrices, compostaje o cualquier otro tema.";
+                    welcomeMsg.style.padding = "5px 0";
+                    welcomeMsg.style.backgroundColor = "#f0f0f0";
+                    chatBody.appendChild(welcomeMsg);
                 }
             }
         }
-        return cookieValue;
-    }
 
-    function toggleChat() {
-        const chatContainer = document.getElementById('chatContainer');
-        const chatBody = document.getElementById('chatBody');
-        chatContainer.classList.toggle('open');
+        function sendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatMessage');
+            const message = input.value.trim();
+            if (message) {
+                const chatBody = document.getElementById('chatBody');
 
-        if (chatContainer.classList.contains('open')) {
-            // Mostrar bienvenida solo si está vacío
-            if (!chatBody.innerHTML) {
-                const welcomeMsg = document.createElement('div');
-                welcomeMsg.textContent = "Bot: ¡Hola! Pregúntame sobre lombrices californianas, compostaje, alimentación, etc.";
-                welcomeMsg.style.padding = "5px 0";
-                welcomeMsg.style.backgroundColor = "#f0f0f0";
-                chatBody.appendChild(welcomeMsg);
+                const userMsg = document.createElement('div');
+                userMsg.textContent = "Tú: " + message;
+                userMsg.style.padding = "5px 0";
+                chatBody.appendChild(userMsg);
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                const csrftoken = getCookie('csrftoken');
+
+                fetch("{% url 'send_message' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: 'message=' + encodeURIComponent(message)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const botReply = document.createElement('div');
+                        botReply.textContent = "Bot: " + data.response;
+                        botReply.style.padding = "5px 0";
+                        botReply.style.backgroundColor = "#f0f0f0";
+                        chatBody.appendChild(botReply);
+                        chatBody.scrollTop = chatBody.scrollHeight; // Mover el scroll aquí
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+                input.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight;
             }
         }
-    }
-
-    function sendMessage(e) {
-        e.preventDefault();
-        const input = document.getElementById('chatMessage');
-        const message = input.value.trim();
-        if (message) {
-            const chatBody = document.getElementById('chatBody');
-
-            const userMsg = document.createElement('div');
-            userMsg.textContent = "Tú: " + message;
-            userMsg.style.padding = "5px 0";
-            chatBody.appendChild(userMsg);
-
-            const csrftoken = getCookie('csrftoken');
-
-            fetch("{% url 'send_message' %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrftoken
-                },
-                body: 'message=' + encodeURIComponent(message)
-            })
-            .then(response => response.json())
-            .then(data => {
-                const botReply = document.createElement('div');
-                botReply.textContent = "Bot: " + data.response;
-                botReply.style.padding = "5px 0";
-                botReply.style.backgroundColor = "#f0f0f0";
-                chatBody.appendChild(botReply);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-            input.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-    }
-</script>
+    </script>
 
 </body>
+
 </html>

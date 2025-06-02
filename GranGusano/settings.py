@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'chat',
     'videollamadas',
     'blogs',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -162,8 +163,8 @@ ACCOUNT_FORMS = {
     'login': 'accounts.forms.CustomLoginForm',  # debe apuntar al módulo correcto
 }
 
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Opcional para seguridad
 
