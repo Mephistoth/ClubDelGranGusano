@@ -3,6 +3,7 @@
 
 <!-- Botón para volver -->
 <a href="{% url 'lista_blogs' %}" class="btn btn-primary mt-3">Volver a la lista</a>
+<hr>
 
 <!-- Tarjeta del blog -->
 <div class="card mt-4 p-4 shadow-sm">
@@ -26,39 +27,9 @@
 <hr>
 <h3>Comentarios</h3>
 
-<!-- Mostrar comentarios -->
+<!-- Mostrar comentarios recursivos -->
 {% if comentarios %}
-  {% for comentario in comentarios %}
-    <div class="border p-3 mb-3 rounded">
-      <strong class="{% if comentario.autor == request.user %}text-primary{% endif %}">
-        {{ comentario.autor.username }}
-      </strong>:
-      <p>{{ comentario.contenido }}</p>
-      <small class="text-muted">{{ comentario.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
-
-      <!-- Botón de responder -->
-      <button type="button" class="btn btn-link p-0" onclick="mostrarRespuesta({{ comentario.id }});">Responder</button>
-
-      <!-- Formulario de respuesta oculto -->
-      <div id="respuesta-form-{{ comentario.id }}" style="display: none; margin-top: 10px;">
-        <form method="POST">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <input type="hidden" name="respuesta_a" value="{{ comentario.id }}">
-          <button type="submit" class="btn btn-sm btn-outline-primary">Responder</button>
-        </form>
-      </div>
-
-      <!-- Respuestas anidadas -->
-      {% for respuesta in comentario.respuestas.all %}
-        <div class="ms-4 mt-3 ps-3 border-start">
-          <strong>{{ respuesta.autor.username }}</strong> respondió:
-          <p>{{ respuesta.contenido }}</p>
-          <small class="text-muted">{{ respuesta.fecha_creacion|date:"d/m/Y H:i" }}</small>
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
+  {% include "blogs/comentario_tree.html" with comentarios=comentarios nivel=0 %}
 {% else %}
   <p class="text-muted">No hay comentarios aún.</p>
 {% endif %}
@@ -75,6 +46,7 @@
   {% endif %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-success">Comentar</button>
+  <hr>
 </form>
 
 <!-- Script para mostrar formulario de respuesta -->

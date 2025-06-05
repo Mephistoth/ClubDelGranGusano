@@ -1,0 +1,35 @@
+{% for comentario in comentarios %}
+  {% with margen=nivel|add:1 %}
+    <div class="comentario-nivel-{{ nivel }} border p-3 mb-3 rounded" style="margin-left: {{ margen }}rem; position: relative;">
+      
+      <!-- Línea vertical (solo decorativa) -->
+      {% if nivel > 0 %}
+        <span class="linea-vertical" style="position: absolute; left: -1rem; top: 0; bottom: 0; border-left: 1px dashed #ccc;"></span>
+      {% endif %}
+      
+      <strong class="{% if comentario.autor == request.user %}text-primary{% endif %}">
+        {{ comentario.autor.username }}
+      </strong>:
+      <p>{{ comentario.contenido }}</p>
+      <small class="text-muted">{{ comentario.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
+
+      <!-- Botón de responder -->
+      <button type="button" class="btn btn-link p-0" onclick="mostrarRespuesta({{ comentario.id }});">Responder</button>
+
+      <!-- Formulario de respuesta oculto -->
+      <div id="respuesta-form-{{ comentario.id }}" style="display: none; margin-top: 10px;">
+        <form method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="hidden" name="respuesta_a" value="{{ comentario.id }}">
+          <button type="submit" class="btn btn-sm btn-outline-primary">Responder</button>
+        </form>
+      </div>
+
+      <!-- Recursión con nivel incrementado -->
+      {% if comentario.respuestas.exists %}
+        {% include "blogs/comentario_tree.html" with comentarios=comentario.respuestas.all nivel=nivel|add:1 %}
+      {% endif %}
+    </div>
+  {% endwith %}
+{% endfor %}

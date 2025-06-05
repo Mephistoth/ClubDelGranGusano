@@ -1,10 +1,31 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Blog, Comentario
 from .forms import BlogForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ComentarioForm
 
+# Vista privada: solo usuarios con permisos ven blogs no aprobados
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def moderar_blogs(request):
+    blogs_pendientes = Blog.objects.filter(aprobado=False).order_by('-fecha_creacion')
+    return render(request, 'blogs/moderar_blogs.html', {
+        'blogs_pendientes': blogs_pendientes
+    })
 
+# Acción: aprobar blog
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def aprobar_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    blog.aprobado = True
+    blog.save()
+    return redirect('moderar_blogs')
+
+# Acción: rechazar blog (opcional, puedes borrarlo o dejarlo sin mostrar)
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def rechazar_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    blog.delete()  # O si prefieres marcar como rechazado, agrega un campo `rechazado`
+    return redirect('moderar_blogs')
 
 def detalle_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
