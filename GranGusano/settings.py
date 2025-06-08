@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'))
 
 
 TIME_ZONE = 'America/Santiago'
@@ -34,10 +38,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 #JAAS API
-JAAS_APP_ID            = os.environ['JAAS_APP_ID']
-JAAS_PRIVATE_KEY_PATH  = os.environ['JAAS_PRIVATE_KEY_PATH']
-JAAS_TENANT            = os.environ['JAAS_TENANT']
-JAAS_KID               = os.environ['JAAS_KID']
+JAAS_APP_ID = os.getenv("JAAS_APP_ID")
+JAAS_TENANT = os.getenv("JAAS_TENANT")
+JAAS_PRIVATE_KEY_PATH = os.getenv("JAAS_PRIVATE_KEY_PATH")
+JAAS_KID = os.getenv("JAAS_KID")
 
 # Application definition
 
