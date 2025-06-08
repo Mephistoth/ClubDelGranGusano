@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+
+TIME_ZONE = 'America/Santiago'
+USE_TZ = True  # Usa zonas horarias conscientes (manténlo activado)
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,12 +31,18 @@ SECRET_KEY = 'django-insecure-&7*9br49w%0i$k*v=h_92d)=5tdjipxt38k9p)e7s&)p672*@r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+#JAAS API
+JAAS_APP_ID            = os.environ['JAAS_APP_ID']
+JAAS_PRIVATE_KEY_PATH  = os.environ['JAAS_PRIVATE_KEY_PATH']
+JAAS_TENANT            = os.environ['JAAS_TENANT']
+JAAS_KID               = os.environ['JAAS_KID']
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,8 +63,9 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'chatbotcito',
     'chat',
-    
-    
+    'videollamadas',
+    'blogs',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -153,17 +165,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #allauth settings
 SITE_ID = 1
 ACCOUNT_FORMS = {
-    'signup': 'accounts.forms.CustomSignupForm',
+    'login': 'accounts.forms.CustomLoginForm',  # debe apuntar al módulo correcto
 }
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Opcional para seguridad
 
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 ACCOUNT_SIGNUP_REDIRECT_URL = '/accounts/login/'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 LOGIN_URL = '/accounts/login/'
+
 # considerar ocupar varibles de entorno mas adelante
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -172,10 +188,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'clubdelgrangusanoweb@gmail.com'
 EMAIL_HOST_PASSWORD = 'kqjk eoxk ulfk vfmc'
 
-ASGI_APPLICATION = 'GranGusano.asgi.application'
+ASGI_APPLICATION = "GranGusano.asgi.application"
 CHANNEL_LAYERS = {
-   "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # ③ Capa en memoria
     },
 }
 
@@ -183,3 +199,8 @@ CHANNEL_LAYERS = {
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# subir esto si o si
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
