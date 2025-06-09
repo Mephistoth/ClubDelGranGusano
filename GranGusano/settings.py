@@ -43,6 +43,7 @@ JAAS_TENANT = os.getenv("JAAS_TENANT")
 JAAS_PRIVATE_KEY_PATH = os.getenv("JAAS_PRIVATE_KEY_PATH")
 JAAS_KID = os.getenv("JAAS_KID")
 
+
 # Application definition
 
 INSTALLED_APPS = [
