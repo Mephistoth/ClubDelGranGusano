@@ -8,14 +8,11 @@
 
 {% for blog in blogs %}
     <div>
-        <h3>{{ blog.titulo }}</h3>
-        <p>Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion }}</p>
-        <div>{{ blog.contenido|safe }}</div>
+        <h3><a href="{% url 'detalle_blog' blog.id %}">{{ blog.titulo }}</a></h3>
+        <p>Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion }}</p>       
+        <p>{{ blog.contenido|truncatewords:20 }}</p>
         {% if blog.imagen %}
             <img src="{{ blog.imagen.url }}" style="max-width:300px;">
-        {% endif %}
-        {% if blog.video_url %}
-            <div><a href="{{ blog.video_url }}" target="_blank">Ver Video</a></div>
         {% endif %}
     </div>
     <hr>
