@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: mi-app-django
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn GranGusano.wsgi:application

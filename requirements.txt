@@ -9,3 +9,4 @@ redis
 django-ckeditor
 jwt
 dotenv
+gunicorn
