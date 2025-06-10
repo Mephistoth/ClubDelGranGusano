@@ -13,39 +13,28 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
+# Cargar variables de entorno desde archivo .env
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'))
 
-
+# Zona horaria y uso de zona horaria consciente
 TIME_ZONE = 'America/Santiago'
-USE_TZ = True  # Usa zonas horarias conscientes (manténlo activado)
+USE_TZ = True
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
+# Seguridad
 SECRET_KEY = 'django-insecure-&7*9br49w%0i$k*v=h_92d)=5tdjipxt38k9p)e7s&)p672*@r'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
-#JAAS API
+# Variables JAAS API desde entorno
 JAAS_APP_ID = os.getenv("JAAS_APP_ID")
 JAAS_TENANT = os.getenv("JAAS_TENANT")
 JAAS_PRIVATE_KEY_PATH = os.getenv("JAAS_PRIVATE_KEY_PATH")
 JAAS_KID = os.getenv("JAAS_KID")
 
-
-# Application definition
-
+# Aplicaciones instaladas
 INSTALLED_APPS = [
     "daphne",
     'django.contrib.admin',
@@ -56,15 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    #django-allauth
+    # django-allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
-    #apartes
+    # Channels
     'channels',
 
-    #app
+    # Apps propias
     'accounts.apps.AccountsConfig',
     'chatbotcito',
     'chat',
@@ -73,6 +62,7 @@ INSTALLED_APPS = [
     'ckeditor',
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -84,8 +74,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL configuración principal
 ROOT_URLCONF = 'GranGusano.urls'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -101,18 +93,14 @@ TEMPLATES = [
     },
 ]
 
+# WSGI y ASGI
 WSGI_APPLICATION = 'GranGusano.wsgi.application'
+ASGI_APPLICATION = "GranGusano.asgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-import os
-import dj_database_url
-
+# Base de datos
 IS_RENDER = os.environ.get('RENDER') is not None
 
 if IS_RENDER:
-    # Usar DB de Render
     DATABASES = {
         'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
     }
@@ -122,100 +110,76 @@ else:
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'postgres',
             'USER': 'postgres',
-            'PASSWORD': 'felipe98', # cambiar contraseña
+            'PASSWORD': 'felipe98',  # Cambia esta contraseña para producción
             'HOST': 'localhost',
             'PORT': '5432',
         }
     }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+# Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
+# Backends de autenticación (incluye allauth)
 AUTHENTICATION_BACKENDS = [
-     # Backend de allauth para login por email
-     'allauth.account.auth_backends.AuthenticationBackend',
-     # Backend estándar, para admin / username
-     'django.contrib.auth.backends.ModelBackend',
- ]
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
+# Internacionalización
 LANGUAGE_CODE = 'es'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'America/Santiago'  # corregido para que sea consistente con arriba
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# Archivos estáticos
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# Archivos media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Tipo de campo por defecto para claves primarias
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-#allauth settings
+# Configuraciones django-allauth
 SITE_ID = 1
+
 ACCOUNT_FORMS = {
-    'login': 'accounts.forms.CustomLoginForm',  # debe apuntar al módulo correcto
+    'login': 'accounts.forms.CustomLoginForm',
 }
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Email obligatorio y verificado
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Opcional para seguridad
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # 5 minutos
 
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 ACCOUNT_SIGNUP_REDIRECT_URL = '/accounts/login/'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
 LOGIN_URL = '/accounts/login/'
 
-# considerar ocupar varibles de entorno mas adelante
+# Configuración correo electrónico desde variables de entorno
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'clubdelgrangusanoweb@gmail.com'
-EMAIL_HOST_PASSWORD = 'kqjk eoxk ulfk vfmc'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'clubdelgrangusanoweb@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'kqjk eoxk ulfk vfmc')  # ¡No subir a repositorio!
 
-ASGI_APPLICATION = "GranGusano.asgi.application"
+# Channels - capa en memoria (para desarrollo)
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",  # ③ Capa en memoria
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
 
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# subir esto si o si
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
