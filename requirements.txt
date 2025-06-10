@@ -11,3 +11,4 @@ PyJWT
 gunicorn
 dj-database-url
 python-dotenv
+whitenoise
