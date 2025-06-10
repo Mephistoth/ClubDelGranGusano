@@ -9,4 +9,6 @@ urlpatterns = [
     path('admin-blogs/', views.moderar_blogs, name='moderar_blogs'),
     path('admin-blogs/aprobar/<int:blog_id>/', views.aprobar_blog, name='aprobar_blog'),
     path('admin-blogs/rechazar/<int:blog_id>/', views.rechazar_blog, name='rechazar_blog'),
+    path('blog/<int:blog_id>/eliminar/', views.eliminar_blog, name='eliminar_blog'),
+
 ]

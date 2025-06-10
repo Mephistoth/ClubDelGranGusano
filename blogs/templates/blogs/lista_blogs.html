@@ -12,8 +12,11 @@
         <p>Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion }}</p>       
         <p>{{ blog.contenido|truncatewords:20 }}</p>
         {% if blog.imagen %}
-            <img src="{{ blog.imagen.url }}" style="max-width:300px;">
+            <img src="{{ blog.imagen.url }}" style="max-width:300px;" alt="Imagen del blog">
+        {% else %}
+            <p>Imagen no disponible</p>
         {% endif %}
+
     </div>
     <hr>
 {% empty %}

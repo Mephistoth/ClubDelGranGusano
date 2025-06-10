@@ -1,3 +1,6 @@
+# Imagenes
+/media/
+
 # Python
 *.pyc
 __pycache__/
@@ -10,6 +13,8 @@ venv/
 
 # Archivos locales
 .env
+jaas-private-key.pk
+Key 8_6_2025, 11_49_33.pub
 
 # Archivos del sistema operativo
 .DS_Store

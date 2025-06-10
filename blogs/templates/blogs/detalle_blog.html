@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 {% block content %}
 
 <!-- Botón para volver -->
 <a href="{% url 'lista_blogs' %}" class="btn btn-primary mt-3">Volver a la lista</a>
 <hr>
+
+{% if user.is_staff or user|has_group:"educador" %}
+  <form method="POST" action="{% url 'eliminar_blog' blog.id %}" onsubmit="return confirm('¿Estás seguro de eliminar esta publicación?');">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-3">Eliminar publicación</button>
+  </form>
+{% endif %}
+
 
 <!-- Tarjeta del blog -->
 <div class="card mt-4 p-4 shadow-sm">

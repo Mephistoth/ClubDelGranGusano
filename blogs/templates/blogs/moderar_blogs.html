@@ -1,38 +1,89 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Centrado completo con flexbox -->
-<div class="d-flex justify-content-center align-items-center flex-column min-vh-100">
-  <h2 class="text-center mb-4">Moderar Blogs</h2>
+<style>
+  .centrado {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    text-align: center;
+  }
+
+  table {
+    width: 90%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  .acciones a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .btn-ver {
+    background-color: #17a2b8;
+  }
+
+  .btn-aprobar {
+    background-color: #28a745;
+  }
+
+  .btn-rechazar {
+    background-color: #dc3545;
+  }
+
+  .mensaje {
+    font-size: 1.1em;
+    color: #555;
+  }
+</style>
+
+<div class="centrado">
+  <h2>Moderar Blogs</h2>
 
   {% if blogs_pendientes %}
-    <div class="table-responsive w-100" style="max-width: 900px;">
-      <table class="table table-striped text-center align-middle">
-        <thead class="table-dark">
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for blog in blogs_pendientes %}
           <tr>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
+            <td>{{ blog.titulo }}</td>
+            <td>{{ blog.autor.username }}</td>
+            <td>{{ blog.fecha_creacion|date:"d/m/Y" }}</td>
+            <td class="acciones">
+              <a href="{% url 'detalle_blog' blog.id %}" class="btn-ver">Ver</a>
+              <a href="{% url 'aprobar_blog' blog.id %}" class="btn-aprobar">Aprobar</a>
+              <a href="{% url 'rechazar_blog' blog.id %}" class="btn-rechazar">Rechazar</a>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {% for blog in blogs_pendientes %}
-            <tr>
-              <td>{{ blog.titulo }}</td>
-              <td>{{ blog.autor.username }}</td>
-              <td>{{ blog.fecha_creacion|date:"d/m/Y" }}</td>
-              <td>
-                <a href="{% url 'detalle_blog' blog.id %}" class="btn btn-sm btn-info me-2">Ver</a>
-                <a href="{% url 'aprobar_blog' blog.id %}" class="btn btn-sm btn-success me-2">Aprobar</a>
-                <a href="{% url 'rechazar_blog' blog.id %}" class="btn btn-sm btn-danger">Rechazar</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p class="lead text-muted">No hay blogs pendientes de aprobación.</p>
+    <p class="mensaje">No hay blogs pendientes de aprobación.</p>
   {% endif %}
 </div>
 {% endblock %}

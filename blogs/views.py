@@ -4,6 +4,14 @@ from .forms import BlogForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ComentarioForm
 
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def eliminar_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    if request.method == "POST":
+        blog.delete()
+        return redirect('lista_blogs')
+    return redirect('detalle_blog', blog_id=blog.id)
+
 # Vista privada: solo usuarios con permisos ven blogs no aprobados
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def moderar_blogs(request):
