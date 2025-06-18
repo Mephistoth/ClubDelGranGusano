@@ -24,6 +24,8 @@
                 {% if user.is_staff or user|has_group:"educador" %}
 
                     <a class="navbar-link" href="{% url 'moderar_blogs' %}">Moderar Blogs</a>
+                    <a href="{% url 'moderar_usuarios' %}" style="margin-top: 20px;"> Moderación de usuarios</a>
+
                 {% endif %}
 
                 <!-- Menú desplegable de usuario -->

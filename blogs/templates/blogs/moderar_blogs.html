@@ -55,6 +55,10 @@
 </style>
 
 <div class="centrado">
+  {% if user.is_superuser %}
+  <a href="{% url 'admin:index' %}" class="btn-admin-panel">Ir al panel de administración</a>
+{% endif %}
+
   <h2>Moderar Blogs</h2>
 
   {% if blogs_pendientes %}

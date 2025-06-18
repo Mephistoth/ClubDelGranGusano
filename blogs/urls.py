@@ -10,5 +10,7 @@ urlpatterns = [
     path('admin-blogs/aprobar/<int:blog_id>/', views.aprobar_blog, name='aprobar_blog'),
     path('admin-blogs/rechazar/<int:blog_id>/', views.rechazar_blog, name='rechazar_blog'),
     path('blog/<int:blog_id>/eliminar/', views.eliminar_blog, name='eliminar_blog'),
+    path('admin-usuarios/', views.moderar_usuarios, name='moderar_usuarios'),
+    path('admin-usuarios/expulsar/<int:user_id>/', views.expulsar_usuario, name='expulsar_usuario'),
 
 ]

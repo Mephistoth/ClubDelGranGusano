@@ -3,6 +3,7 @@ from .models import Blog, Comentario
 from .forms import BlogForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ComentarioForm
+from django.contrib.auth.models import User
 
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def eliminar_blog(request, blog_id):
@@ -78,3 +79,32 @@ def crear_blog(request):
     else:
         form = BlogForm()
     return render(request, 'blogs/crear_blog.html', {'form': form})
+
+
+ # 18 de junio
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def moderar_usuarios(request):
+    query = request.GET.get('q', '')
+    if query:
+        usuarios = User.objects.filter(username__icontains=query)
+    else:
+        usuarios = User.objects.all()
+
+    total_usuarios = usuarios.count()
+    usuarios_activos = usuarios.filter(is_active=True).count()
+
+    return render(request, 'blogs/moderar_usuarios.html', {
+        'usuarios': usuarios,
+        'total_usuarios': total_usuarios,
+        'usuarios_activos': usuarios_activos,
+        'query': query,
+    })
+# 18 de junio
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def expulsar_usuario(request, user_id):
+    usuario = get_object_or_404(User, id=user_id)
+    if usuario.is_superuser:
+        # Para evitar eliminar al superusuario
+        return redirect('moderar_usuarios')
+    usuario.delete()
+    return redirect('moderar_usuarios')
