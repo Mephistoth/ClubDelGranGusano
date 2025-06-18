@@ -99,6 +99,7 @@ def moderar_usuarios(request):
         'usuarios_activos': usuarios_activos,
         'query': query,
     })
+
 # 18 de junio
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def expulsar_usuario(request, user_id):

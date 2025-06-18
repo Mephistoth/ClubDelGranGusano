@@ -20,13 +20,13 @@
                 <!-- Link a Blogs -->
                 <a href="{% url 'lista_blogs' %}" class="navbar-link">Blogs</a>
 
-                <!-- Botón Vista Admin Blogs -->
-                {% if user.is_staff or user|has_group:"educador" %}
+                    <!-- Botón Vista Admin Blogs -->
+                    {% if user.is_staff or user|has_group:"educador" %}
 
-                    <a class="navbar-link" href="{% url 'moderar_blogs' %}">Moderar Blogs</a>
-                    <a href="{% url 'moderar_usuarios' %}" style="margin-top: 20px;"> Moderación de usuarios</a>
+                        <a class="navbar-link" href="{% url 'moderar_blogs' %}">Moderar Blogs</a>
+                        <a href="{% url 'moderar_usuarios' %}" style="margin-top: 20px;"> Moderación de usuarios</a>
 
-                {% endif %}
+                    {% endif %}
 
                 <!-- Menú desplegable de usuario -->
                 <div class="navbar-dropdown">

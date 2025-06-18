@@ -41,6 +41,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+
 #JAAS API
 JAAS_APP_ID = os.getenv("JAAS_APP_ID")
 JAAS_TENANT = os.getenv("JAAS_TENANT")
