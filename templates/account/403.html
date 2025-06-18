@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="text-align: center; padding: 60px;">
+  <h1 style="font-size: 80px; color: #ffc107;">403</h1>
+  <h2>Acceso denegado</h2>
+  <p>No tienes permisos para acceder a esta página.</p>
+  <a href="{% url 'lista_blogs' %}" style="margin-top: 20px; display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Volver al inicio</a>
+</div>
+{% endblock %}

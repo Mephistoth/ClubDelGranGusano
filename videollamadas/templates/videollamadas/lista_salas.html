@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h2>Salas públicas disponibles</h2>
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% if salas %}
+    <ul>
+      {% for sala in salas %}
+        <li>
+          <strong>{{ sala.codigo }}</strong>
+          (creada por {{ sala.creador.username }} el {{ sala.fecha_creacion|date:"d/m/Y H:i" }})
+          – 
+          <a href="{% url 'videollamadas:room' sala.codigo %}">Unirse</a>
+          {% if sala.creador == user %}
+            – <em>(tú eres el anfitrión)</em>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No hay salas públicas disponibles.</p>
+  {% endif %}
+
+  <p><a href="{% url 'videollamadas:crear_sala' %}">Crear nueva sala</a></p>
+{% endblock %}

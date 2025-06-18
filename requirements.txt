@@ -3,3 +3,12 @@ psycopg2-binary
 django-allauth
 channels
 Pillow
+daphne
+channels-redis
+redis
+django-ckeditor
+PyJWT 
+gunicorn
+dj-database-url
+python-dotenv
+whitenoise

@@ -4,19 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Registro</title>
-  <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <h2>Crear cuenta</h2>
-      <form method="POST" action="{% url 'account_signup' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Registrarse</button>
-      </form>
-      <p>¿Ya tienes cuenta? <a href="{% url 'account_login' %}">Iniciar sesión</a></p>
-    </div>
+    <h2>Crear cuenta</h2>
+
+    {% if form.non_field_errors %}
+      <div style="color: red;">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+
+        {% if field.errors %}
+          <div style="color: red;">
+            {% for error in field.errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <button type="submit">Registrarse</button>
+    </form>
+
+    <p>¿Ya tienes cuenta? <a href="{% url 'account_login' %}">Iniciar sesión</a></p>
   </div>
+  <script src="{% static 'js/signup.js' %}"></script>
 </body>
 </html>

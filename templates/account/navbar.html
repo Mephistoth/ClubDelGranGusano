@@ -1,14 +1,32 @@
 {% load static %}
-
+{% load custom_tags %}
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="navbar-logo">
+        <div class="navbar-logo" style="display: flex; align-items: center;">
+            <a href="{% url 'home' %}">
+                <img src="/media/ElgranGusano.jpg" alt="El comilón" class="navbar-logo-img">
+            </a>
             <h2>Club del Gran Gusano</h2>
         </div>
+
         <div class="navbar-links">
             {% if user.is_authenticated %}
                 <!-- Link al Chat -->
-                <a href="{% url 'chat' %}" class="navbar-link">Chat</a>
+                <a href="{% url 'chat' %}" class="navbar-link">Chat Comunitario</a>
+
+                <!-- Link a Videollamadas -->
+                <a href="{% url 'videollamadas:crear_sala' %}" class="nav-link">Videollamada</a>
+
+                <!-- Link a Blogs -->
+                <a href="{% url 'lista_blogs' %}" class="navbar-link">Blogs</a>
+
+                <!-- Botón Vista Admin Blogs -->
+                {% if user.is_staff or user|has_group:"educador" %}
+
+                    <a class="navbar-link" href="{% url 'moderar_blogs' %}">Moderar Blogs</a>
+                    <a href="{% url 'moderar_usuarios' %}" style="margin-top: 20px;"> Moderación de usuarios</a>
+
+                {% endif %}
 
                 <!-- Menú desplegable de usuario -->
                 <div class="navbar-dropdown">
@@ -24,6 +42,7 @@
                         <a href="{% url 'account_logout' %}">Cerrar sesión</a>
                     </div>
                 </div>
+
             {% else %}
                 <a href="{% url 'account_login' %}">Iniciar sesión</a>
                 <a href="{% url 'account_signup' %}">Registrarse</a>
