@@ -1,29 +1,22 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import update_session_auth_hash
-from .forms import PerfilForm
-from django.contrib.auth.decorators import login_required
+from django.contrib import admin
+from django.urls import path, include
+from accounts.views import home, custom_login, perfil_usuario, editar_perfil  # Importamos las vistas necesarias
+from django.conf import settings
+from django.conf.urls.static import static
+from accounts import views
 
 
-def home(request):
-    return render(request, 'account/home.html')
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/login/', custom_login, name='account_login'),  # Ruta para el login personalizado
+    path('accounts/', include('allauth.urls')),  # Agregamos la ruta de login y otras rutas de allauth
+    path('perfil/', perfil_usuario, name='perfil'),  # Ruta para la vista de perfil de usuario
+    path('perfil/editar/', editar_perfil, name='editar_perfil'),  # Ruta para la vista de editar perfil de usuario
+    path('', home, name='home'),  # Ruta para la página de inicio
+    path('chatbot/', include('chatbotcito.urls')),  # Ruta para las vistas de chatbotcito
+    path('chat/', include('chat.urls')),  # Ruta para las vistas de chat
+    path('accounts/eliminar-cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
+]
 
-@login_required
-def perfil_usuario(request):
-    return render(request, 'account/perfil.html')
-
-@login_required
-def editar_perfil(request):
-    if request.method == 'POST':
-        form = PerfilForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            user = form.save(commit=False)
-            password1 = form.cleaned_data.get('password1')
-            if password1:
-                user.set_password(password1)
-            user.save()
-            form.save()
-            update_session_auth_hash(request, user)
-            return redirect('perfil')
-    else:
-        form = PerfilForm(instance=request.user)
-    return render(request, 'account/editar_perfil.html', {'form': form})
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
