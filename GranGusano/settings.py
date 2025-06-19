@@ -222,3 +222,5 @@ CKEDITOR_CONFIGS = {
         'extraAllowedContent': 'iframe[*]; script[*]; source[*];', # Si necesitas permitir iframes, scripts, etc.
     }
 }
+# Asegúrate de que CKEDITOR_UPLOAD_PATH esté definido si usas ckeditor_uploader
+CKEDITOR_UPLOAD_PATH = "uploads/" # Esto crea una subcarpeta 'uploads' dentro de tu MEDIA_ROOT
