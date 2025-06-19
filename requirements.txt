@@ -15,3 +15,4 @@ dj-database-url
 python-dotenv
 whitenoise
 django-ckeditor  
+django-ckeditor-uploader
