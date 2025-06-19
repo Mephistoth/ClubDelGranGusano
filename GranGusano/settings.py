@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # Terceros
     'channels',
     'ckeditor',
+    'ckeditor_uploader',
 
     # Tus apps
     'accounts.apps.AccountsConfig',
