@@ -182,3 +182,12 @@ CHANNEL_LAYERS = {
 
 # ─── AUTO FIELD ───────────────────────────────────────────────────────────────
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Opcional: Configuración básica de CKEditor (puedes añadirla si no la tienes)
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 800,
+    },
+}

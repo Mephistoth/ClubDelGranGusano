@@ -2,71 +2,225 @@
 {% load custom_tags %}
 {% block content %}
 
-<!-- Botón para volver -->
-<a href="{% url 'lista_blogs' %}" class="btn btn-primary mt-3">Volver a la lista</a>
-<hr>
+<style>
+    /* Estilos para el contenedor principal del blog */
+    .blog-post-container {
+        padding: 2.5rem; /* Un poco más de padding */
+        background-color: #ffffff; /* Fondo blanco para el contenido */
+        border-radius: 0.5rem; /* Bordes redondeados */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+        margin-bottom: 2rem; /* Espacio debajo del post */
+    }
 
-{% if user.is_staff or user|has_group:"educador" %}
-  <form method="POST" action="{% url 'eliminar_blog' blog.id %}" onsubmit="return confirm('¿Estás seguro de eliminar esta publicación?');">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger mt-3">Eliminar publicación</button>
-  </form>
-{% endif %}
+    /* Estilos para el título del blog */
+    .blog-post-container h2 {
+        color: #343a40; /* Color oscuro para el título */
+        font-size: 2.5rem; /* Tamaño de fuente más grande */
+        font-weight: 700; /* Negrita */
+        margin-bottom: 0.75rem; /* Espacio debajo del título */
+        line-height: 1.2; /* Altura de línea */
+    }
+
+    /* Estilos para la información del autor y fecha */
+    .blog-post-container .text-muted {
+        font-size: 0.95rem; /* Tamaño de fuente ligeramente más grande */
+        color: #6c757d !important; /* Color gris más claro */
+        margin-bottom: 1.5rem; /* Más espacio debajo de la meta-información */
+    }
+
+    /* Estilos para el contenido generado por CKEditor */
+    /* Estas reglas son CRUCIALES para que el HTML de CKEditor se vea bien */
+    .blog-content p {
+        margin-bottom: 1rem; /* Espacio entre párrafos */
+        line-height: 1.7; /* Altura de línea para mejor legibilidad */
+        font-size: 1.1rem; /* Tamaño de fuente para el texto del cuerpo */
+        color: #343a40; /* Color del texto del cuerpo */
+    }
+
+    .blog-content h1,
+    .blog-content h2,
+    .blog-content h3,
+    .blog-content h4,
+    .blog-content h5,
+    .blog-content h6 {
+        margin-top: 2rem; /* Espacio superior para encabezados */
+        margin-bottom: 1rem; /* Espacio inferior para encabezados */
+        color: #495057; /* Color de los encabezados internos del blog */
+        font-weight: 600; /* Seminegrita para los encabezados */
+    }
+
+    .blog-content h1 { font-size: 2.2rem; }
+    .blog-content h2 { font-size: 1.8rem; }
+    .blog-content h3 { font-size: 1.6rem; }
+    .blog-content h4 { font-size: 1.4rem; }
+    .blog-content h5 { font-size: 1.2rem; }
+    .blog-content h6 { font-size: 1rem; }
 
 
-<!-- Tarjeta del blog -->
-<div class="card mt-4 p-4 shadow-sm">
-  <h2 class="mb-3">{{ blog.titulo }}</h2>
-  <p class="text-muted">Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion|date:"d/m/Y H:i" }}</p>
-  <div class="mb-3">{{ blog.contenido|safe }}</div>
+    .blog-content ul,
+    .blog-content ol {
+        margin-bottom: 1rem; /* Espacio debajo de listas */
+        padding-left: 1.5rem; /* Sangría para listas */
+    }
 
-  <!-- Imagen del blog -->
-  {% if blog.imagen %}
-    <img src="{{ blog.imagen.url }}" alt="Imagen del blog: {{ blog.titulo }}" class="img-fluid rounded mb-3" style="max-width: 100%; height: auto;">
-  {% endif %}
+    .blog-content li {
+        margin-bottom: 0.5rem; /* Espacio entre elementos de lista */
+        line-height: 1.6;
+    }
 
-  <!-- Video del blog -->
-  {% if blog.video_url %}
-    <div class="mb-3">
-      <a href="{{ blog.video_url }}" target="_blank" class="btn btn-outline-secondary">Ver Video</a>
-    </div>
-  {% endif %}
+    .blog-content a {
+        color: #007bff; /* Color de enlaces */
+        text-decoration: underline; /* Subrayado de enlaces */
+    }
+
+    .blog-content a:hover {
+        color: #0056b3; /* Color de enlaces al pasar el ratón */
+        text-decoration: none; /* Sin subrayado al pasar el ratón */
+    }
+
+    .blog-content blockquote {
+        border-left: 5px solid #007bff; /* Borde a la izquierda para citas */
+        padding: 1rem 1.2rem; /* Espacio interno */
+        margin: 1.5rem 0; /* Espacio exterior */
+        background-color: #e9f0f9; /* Fondo claro para citas */
+        font-style: italic; /* Cursiva para citas */
+        color: #555;
+        border-radius: 0.25rem;
+    }
+
+    .blog-content pre {
+        background-color: #f8f9fa; /* Fondo para bloques de código */
+        padding: 1rem;
+        border-radius: 0.25rem;
+        overflow-x: auto; /* Desplazamiento horizontal para código largo */
+    }
+
+    .blog-content code {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        font-size: 0.875em;
+        color: #e83e8c;
+    }
+
+    .blog-content img {
+        max-width: 100%; /* Imágenes responsivas dentro del contenido */
+        height: auto;
+        border-radius: 0.5rem; /* Bordes redondeados para imágenes */
+        margin: 1.5rem 0; /* Espacio arriba y abajo de las imágenes */
+        display: block; /* Para centrar si quieres */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Estilos para el botón de eliminar */
+    .delete-form {
+        display: inline-block; /* Para que el botón de eliminar no rompa la línea */
+        margin-left: 1rem; /* Espacio a la izquierda del botón de volver */
+    }
+
+    /* Estilos para la sección de comentarios */
+    .comments-section {
+        margin-top: 3rem; /* Más espacio arriba de la sección de comentarios */
+        padding-top: 2rem;
+        border-top: 1px solid #dee2e6; /* Línea divisoria */
+    }
+
+    .comment-form {
+        margin-bottom: 3rem; /* Espacio debajo del formulario de comentarios */
+    }
+
+    /* Estilos para el botón de volver */
+    .back-button {
+        font-size: 1rem; /* Tamaño de fuente para el botón de volver */
+        padding: 0.6rem 1.2rem; /* Relleno del botón */
+        border-radius: 0.3rem; /* Bordes ligeramente redondeados */
+    }
+
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="{% url 'lista_blogs' %}" class="btn btn-primary back-button">
+        <i class="bi bi-arrow-left"></i> Volver a la lista
+    </a>
+    {% if user.is_staff or user|has_group:"educador" %}
+    <form method="POST" action="{% url 'eliminar_blog' blog.id %}" onsubmit="return confirm('¿Estás seguro de eliminar esta publicación?');" class="delete-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Eliminar publicación
+        </button>
+    </form>
+    {% endif %}
 </div>
 
-<hr>
-<h3>Comentarios</h3>
+<div class="blog-post-container">
+    <h2 class="mb-3">{{ blog.titulo }}</h2>
+    <p class="text-muted">Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion|date:"d/m/Y H:i" }}</p>
 
-<!-- Mostrar comentarios recursivos -->
-{% if comentarios %}
-  {% include "blogs/comentario_tree.html" with comentarios=comentarios nivel=0 %}
-{% else %}
-  <p class="text-muted">No hay comentarios aún.</p>
-{% endif %}
-
-<h3>Agregar comentario</h3>
-{% if user.is_authenticated %}
-  <form method="POST" class="mt-3">
-    {% csrf_token %}
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        Por favor corrige los errores.
-      </div>
+    {% if blog.imagen %}
+        <div class="text-center mb-4">
+            <img src="{{ blog.imagen.url }}" alt="Imagen del blog: {{ blog.titulo }}" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+        </div>
     {% endif %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Comentar</button>
-    <hr>
-  </form>
-{% else %}
-  <p class="text-muted">Debes <a href="{% url 'account_login' %}">iniciar sesión</a> para comentar.</p>
-{% endif %}
 
+    <div class="blog-content mb-4">
+        {{ blog.contenido|safe }}
+    </div>
+
+    {% if blog.video_url %}
+        <div class="mb-3 text-center">
+            <a href="{{ blog.video_url }}" target="_blank" class="btn btn-outline-secondary">
+                <i class="bi bi-play-circle"></i> Ver Video
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="comments-section">
+    <h3 class="mb-4">Comentarios</h3>
+
+    {% if comentarios %}
+        {% include "blogs/comentario_tree.html" with comentarios=comentarios nivel=0 %}
+    {% else %}
+        <p class="text-muted">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+    {% endif %}
+
+    <h3 class="mt-5 mb-3">Agregar comentario</h3>
+    {% if user.is_authenticated %}
+        <form method="POST" class="mt-3 comment-form">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Por favor corrige los errores:
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success mt-3">
+                <i class="bi bi-chat-dots"></i> Comentar
+            </button>
+            <hr class="mt-4">
+        </form>
+    {% else %}
+        <p class="text-muted">Debes <a href="{% url 'account_login' %}" class="text-decoration-underline">iniciar sesión</a> para comentar.</p>
+    {% endif %}
+</div>
 
 
 <script>
-function mostrarRespuesta(id) {
-  const form = document.getElementById('respuesta-form-' + id);
-  if (form) form.style.display = 'block';
-}
+    function mostrarRespuesta(id) {
+        const form = document.getElementById('respuesta-form-' + id);
+        if (form) {
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        }
+    }
 </script>
 
 {% endblock %}
