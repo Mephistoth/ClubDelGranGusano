@@ -58,14 +58,17 @@
         margin-bottom: 1rem;
     }
 
+    /* ********** CAMBIO CLAVE AQUÍ: IMAGEN MÁS PEQUEÑA ********** */
     .blog-item img {
-        max-width: 100%; /* Asegura que la imagen no desborde */
-        height: auto;
+        max-width: 250px; /* Ancho máximo para la imagen, ajusta este valor */
+        height: auto; /* La altura se ajusta automáticamente para mantener la proporción */
+        display: block; /* Para que margin: auto funcione */
+        margin: 1rem auto; /* Centrar la imagen horizontalmente y añadir margen */
         border-radius: 4px;
-        margin-top: 1rem;
-        display: block; /* Para centrar si es necesario con margin: auto */
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
+    /* ********** FIN CAMBIO IMAGEN ********** */
+
 
     .btn-create-blog {
         display: block;
@@ -97,10 +100,9 @@
             <h3><a href="{% url 'detalle_blog' blog.id %}">{{ blog.titulo }}</a></h3>
             <p class="meta-info">Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion|date:"d/m/Y H:i" }}</p>
             
-            <div class="blog-summary">
-                {# AQUÍ ES LA CORRECCIÓN CLAVE: striptags antes de truncatewords #}
-                <p>{{ blog.contenido|striptags|truncatewords:30 }}</p>
-            </div>
+            {# <div class="blog-summary"> #}
+            {#    <p>{{ blog.contenido|striptags|truncatewords:30 }}</p> #}
+            {# </div> #}
 
             {% if blog.imagen %}
                 <img src="{{ blog.imagen.url }}" alt="Imagen del blog: {{ blog.titulo }}">
