@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from allauth.account.forms import LoginForm
 from allauth.account.models import EmailAddress
 from .models import Profile
-
-
+import cloudinary.uploader
 
 # FORMULARIO PERSONALIZADO DE LOGIN
 class CustomLoginForm(LoginForm):
@@ -24,10 +23,20 @@ class CustomLoginForm(LoginForm):
             )
 
 
-# FORMULARIO DE PERFIL DE USUARIO (sin cambios)
+# FORMULARIO DE PERFIL DE USUARIO MEJORADO
 class PerfilForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=30, label="Nombre", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    last_name = forms.CharField(max_length=30, label="Apellido", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(
+        max_length=30, 
+        label="Nombre", 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    last_name = forms.CharField(
+        max_length=30, 
+        label="Apellido", 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
     
     password1 = forms.CharField(
         label="Contraseña nueva",
@@ -40,7 +49,11 @@ class PerfilForm(forms.ModelForm):
         required=False
     )
 
-    foto = forms.ImageField(label='Foto de perfil', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    foto = forms.ImageField(
+        label='Foto de perfil', 
+        required=False, 
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
+    )
 
     class Meta:
         model = User
@@ -62,8 +75,11 @@ class PerfilForm(forms.ModelForm):
 
         if foto:
             profile, created = Profile.objects.get_or_create(user=user)
-            profile.foto = foto
-            profile.save()
+            # Solo subir a Cloudinary si el archivo no está vacío
+            if foto.size > 0:
+                upload_result = cloudinary.uploader.upload(foto)
+                profile.foto = upload_result.get('secure_url', '')  # Guarda la URL segura
+                profile.save()
 
         if self.cleaned_data.get('password1'):
             user.set_password(self.cleaned_data.get('password1'))

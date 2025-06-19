@@ -17,13 +17,20 @@ def editar_perfil(request):
         form = PerfilForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
+
+            # Mantener la lógica de la contraseña
             password1 = form.cleaned_data.get('password1')
             if password1:
                 user.set_password(password1)
+
             user.save()
+
+            # Guardar foto y demás (usando form.save para subir foto)
             form.save()
+
             update_session_auth_hash(request, user)
             return redirect('perfil')
     else:
         form = PerfilForm(instance=request.user)
     return render(request, 'account/editar_perfil.html', {'form': form})
+

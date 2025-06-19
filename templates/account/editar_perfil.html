@@ -38,7 +38,8 @@
         <h2>Editar Perfil</h2>
 
         {% if user.profile.foto %}
-            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="foto-perfil">
+            <img src="{{ user.profile.foto }}" alt="Foto de perfil" class="foto-perfil">
+
         {% else %}
             <p>No has subido una foto de perfil.</p>
         {% endif %}
