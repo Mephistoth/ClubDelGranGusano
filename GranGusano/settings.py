@@ -183,11 +183,41 @@ CHANNEL_LAYERS = {
 # ─── AUTO FIELD ───────────────────────────────────────────────────────────────
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Opcional: Configuración básica de CKEditor (puedes añadirla si no la tienes)
+# tu_proyecto/settings.py
+
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',
-        'height': 300,
-        'width': 800,
-    },
+        'toolbar': 'Custom', # Le das un nombre a tu configuración personalizada
+        'toolbar_Custom': [ # Define los botones para 'Custom'
+            ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'],
+            ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
+            '/', # Salto de línea para la siguiente fila de botones
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'],
+            '/',
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['TextColor', 'BGColor'],
+            ['Maximize', 'ShowBlocks', '-', 'About']
+        ],
+        'width': '100%', # Para que el editor ocupe todo el ancho disponible
+        'height': 400, # Puedes ajustar la altura
+        'autoGrow_minHeight': 200, # Altura mínima si usas autoGrow
+        'autoGrow_maxHeight': 600, # Altura máxima si usas autoGrow
+        'autoGrow_onStartup': True, # Para que se ajuste al cargar
+        'extraPlugins': 'codesnippet,autolink', # Ejemplo de plugins adicionales (ver abajo)
+        # Otros ajustes útiles
+        'enterMode': 2, # CKEDITOR.ENTER_BR (Cada Enter inserta <br>)
+                        # 1 es CKEDITOR.ENTER_P (Cada Enter inserta <p>, recomendado para blogs)
+                        # 3 es CKEDITOR.ENTER_DIV (Cada Enter inserta <div>)
+        'forceEnterMode': True, # Fuerza el modo de entrada definido
+        'allowedContent': True, # Permite todo el contenido HTML (menos restrictivo)
+                                # CUIDADO: Permite inyección XSS si no confías en el usuario.
+                                # Una opción más segura es definir qué etiquetas, atributos, etc. están permitidos.
+        'removePlugins': 'stylesheetparser', # Remover plugins que no uses para aligerar
+        'extraAllowedContent': 'iframe[*]; script[*]; source[*];', # Si necesitas permitir iframes, scripts, etc.
+    }
 }
