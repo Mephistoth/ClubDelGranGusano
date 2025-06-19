@@ -48,10 +48,7 @@
             {{ form.as_p }}
             <button type="submit">Guardar Cambios</button>
         </form>
-        <form method="post" action="{% url 'eliminar_cuenta' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn-danger">Eliminar cuenta</button>
-        </form>
+
 
         <a href="{% url 'perfil' %}">Cancelar</a>
     </main>

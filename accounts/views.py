@@ -15,7 +15,6 @@ urlpatterns = [
     path('', home, name='home'),  # Ruta para la página de inicio
     path('chatbot/', include('chatbotcito.urls')),  # Ruta para las vistas de chatbotcito
     path('chat/', include('chat.urls')),  # Ruta para las vistas de chat
-    path('accounts/eliminar-cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
 ]
 
 if settings.DEBUG:
