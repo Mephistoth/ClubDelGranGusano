@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Lista de Videollamadas</h1>
+
+    {% if user.is_staff %}
+        <a href="{% url 'crear_videollamada' %}" class="btn btn-primary">Crear Nueva Videollamada</a>
+    {% endif %}
+
+    <ul>
+        {% for llamada in videollamadas %}
+    <div>
+        <h3>{{ llamada.titulo }} - {{ llamada.fecha_creacion|date:"d M Y H:i" }}</h3>
+        <a href="{{ llamada.enlace }}" target="_blank">Unirse a la llamada</a>
+        {% if user.is_staff %}
+            <form action="{% url 'eliminar_videollamada' llamada.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar esta videollamada?');">Eliminar</button>
+            </form>
+        {% endif %}
+    </div>
+{% endfor %}
+
+
+    </ul>
+
+    <script src="{% static 'js/lista.js' %}"></script>
+{% endblock %}

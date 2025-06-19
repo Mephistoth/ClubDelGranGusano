@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load account %}
+{% load allauth %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/logout.css' %}">
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">
+            {% trans "Confirm Email Address" %}
+        </h5>
+
+        {% if confirmation %}
+            {% user_display confirmation.email_address.user as user_display %}
+            {% if can_confirm %}
+                <p class="card-text">
+                    {% blocktrans with confirmation.email_address.email as email %}
+                        Por favor, confirma que <a href="mailto:{{ email }}">{{ email }}</a> es una dirección de correo electrónico para el usuario {{ user_display }}.
+                    {% endblocktrans %}
+                </p>
+                {% url 'account_confirm_email' confirmation.key as action_url %}
+                <form method="post" action="{{ action_url }}">
+                    {% csrf_token %}
+                    {{ redirect_field }}
+                    <button type="submit" class="btn btn-primary">
+                        {% trans 'Confirmar' %}
+                    </button>
+                </form>
+            {% else %}
+                <p class="card-text text-danger">
+                    {% blocktrans %}No se puede confirmar {{ email }} porque ya está confirmado por otra cuenta.{% endblocktrans %}
+                </p>
+            {% endif %}
+        {% else %}
+            {% url 'account_email' as email_url %}
+            <p class="card-text text-warning">
+                {% blocktrans %}Este enlace de confirmación de correo electrónico ha caducado o no es válido. Por favor, <a href="{{ email_url }}">solicite un nuevo correo electrónico de confirmación</a>.{% endblocktrans %}
+            </p>
+        {% endif %}
+    </div>
+</div>
