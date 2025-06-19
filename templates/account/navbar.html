@@ -1,34 +1,33 @@
 {% load static %}
 {% load custom_tags %}
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="navbar-logo" style="display: flex; align-items: center;">
+        <div class="navbar-logo">
             <a href="{% url 'home' %}">
                 <img src="/media/ElgranGusano.jpg" alt="El comilón" class="navbar-logo-img">
             </a>
             <h2>Club del Gran Gusano</h2>
         </div>
 
-        <div class="navbar-links">
+        <!-- Botón hamburguesa -->
+        <button class="navbar-toggle" id="navbar-toggle">
+            ☰
+        </button>
+
+        <!-- Menú de navegación -->
+        <div class="navbar-links" id="navbar-links">
             {% if user.is_authenticated %}
-                <!-- Link al Chat -->
                 <a href="{% url 'chat' %}" class="navbar-link">Chat Comunitario</a>
-
-                <!-- Link a Videollamadas -->
-                <a href="{% url 'videollamadas:crear_sala' %}" class="nav-link">Videollamada</a>
-
-                <!-- Link a Blogs -->
+                <a href="{% url 'videollamadas:crear_sala' %}" class="navbar-link">Videollamada</a>
                 <a href="{% url 'lista_blogs' %}" class="navbar-link">Blogs</a>
 
-                    <!-- Botón Vista Admin Blogs -->
-                    {% if user.is_staff or user|has_group:"educador" %}
+                {% if user.is_staff or user|has_group:"educador" %}
+                    <a href="{% url 'moderar_blogs' %}" class="navbar-link">Moderar Blogs</a>
+                    <a href="{% url 'moderar_usuarios' %}" class="navbar-link">Moderación de usuarios</a>
+                {% endif %}
 
-                        <a class="navbar-link" href="{% url 'moderar_blogs' %}">Moderar Blogs</a>
-                        <a href="{% url 'moderar_usuarios' %}" style="margin-top: 20px;"> Moderación de usuarios</a>
-
-                    {% endif %}
-
-                <!-- Menú desplegable de usuario -->
                 <div class="navbar-dropdown">
                     <button class="navbar-user">
                         {% if user.first_name %}
@@ -44,9 +43,15 @@
                 </div>
 
             {% else %}
-                <a href="{% url 'account_login' %}">Iniciar sesión</a>
-                <a href="{% url 'account_signup' %}">Registrarse</a>
+                <a href="{% url 'account_login' %}" class="navbar-link">Iniciar sesión</a>
+                <a href="{% url 'account_signup' %}" class="navbar-link">Registrarse</a>
             {% endif %}
         </div>
     </div>
 </nav>
+
+<script>
+    document.getElementById("navbar-toggle").addEventListener("click", function () {
+        document.getElementById("navbar-links").classList.toggle("active");
+    });
+</script>
