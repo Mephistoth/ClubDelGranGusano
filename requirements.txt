@@ -8,10 +8,9 @@ Pillow
 daphne
 channels-redis
 redis
-django-ckeditor
-PyJWT 
+PyJWT
 gunicorn
 dj-database-url
 python-dotenv
 whitenoise
-django-ckeditor  
+django-tinymce==4.1.0

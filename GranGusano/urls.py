@@ -16,8 +16,9 @@ urlpatterns = [
     path('chat/', chat_views.chat_room, name='chat'),
     path('videollamadas/', include('videollamadas.urls', namespace='videollamadas')),
     path('blogs/', include('blogs.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')), 
-    path('ckeditor/', include('ckeditor.urls')),
+    
+
+
 
 ]
 

@@ -1,9 +1,91 @@
 {% extends 'base.html' %}
+{% load static %} {# No olvides cargar static si lo necesitas para otras cosas, aunque no lo usemos directamente para estos estilos #}
+
 {% block content %}
-<h2>Crear Blog</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Publicar</button>
-</form>
+<style>
+    /* Estilos para centrar el contenido y limitar el ancho del formulario */
+    .form-container {
+        max-width: 800px; /* Ancho máximo del formulario en pantallas grandes */
+        margin: 40px auto; /* Centra el contenedor y añade margen superior/inferior */
+        padding: 20px; /* Espacio interno del contenedor */
+        background-color: #f8f9fa; /* Un fondo ligero para el contenedor */
+        border-radius: 8px; /* Bordes ligeramente redondeados */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave para darle profundidad */
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #343a40;
+    }
+
+    /* Estilos para los párrafos generados por {{ form.as_p }} */
+    .form-container p {
+        margin-bottom: 1rem; /* Espacio entre cada campo/párrafo */
+    }
+
+    /* Estilos para las etiquetas */
+    .form-container label {
+        display: block; /* Hace que la etiqueta ocupe su propia línea */
+        margin-bottom: 0.5rem; /* Espacio entre la etiqueta y el campo */
+        font-weight: bold; /* Pone la etiqueta en negrita */
+        color: #495057;
+    }
+
+    /* Estilos para los campos de input y textarea (excluyendo TinyMCE explícitamente si es necesario, pero TinyMCE lo reemplaza) */
+    .form-container input[type="text"],
+    .form-container input[type="url"],
+    .form-container textarea { /* El textarea original */
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        box-sizing: border-box; /* Incluye padding y border en el ancho total */
+    }
+    
+    /* ESTILOS ESPECÍFICOS PARA EL EDITOR TINYMCE */
+    /* TinyMCE crea un iframe y elementos con prefijo tox- */
+    .tox-tinymce {
+        width: 100% !important; /* Asegura que el editor ocupe todo el ancho disponible en su contenedor */
+        max-width: none !important; /* Anula cualquier ancho máximo por defecto de TinyMCE */
+        box-sizing: border-box; /* Importante para el cálculo del ancho */
+        margin-bottom: 1rem; /* Espacio debajo del editor */
+    }
+
+    /* Ajustar la altura del editor si se necesita (opcional, configurado en settings.py) */
+    .tox-tinymce .tox-edit-area__iframe {
+        min-height: 250px; /* Altura mínima para el área de edición */
+    }
+
+    /* Estilo para el botón de enviar */
+    .form-container button[type="submit"] {
+        display: block; /* Hace que el botón ocupe su propia línea */
+        width: auto; /* Ocupa el ancho natural del botón */
+        margin-top: 20px; /* Margen superior para separarlo de los campos */
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .form-container button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+
+<div class="form-container"> {# Nuevo contenedor para aplicar los estilos #}
+    <h2>Crear Blog</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Publicar</button>
+    </form>
+</div>
+
+{{ form.media }}
+
 {% endblock %}

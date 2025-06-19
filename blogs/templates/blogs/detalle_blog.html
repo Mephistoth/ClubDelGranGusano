@@ -1,40 +1,49 @@
 {% extends 'base.html' %}
-{% load custom_tags %}
+{% load custom_tags %} {# Asegúrate de que custom_tags es el nombre correcto de tu app o módulo de tags #}
+
 {% block content %}
 
 <style>
-    /* Estilos para el contenedor principal del blog */
+    /* Contenedor principal para el detalle del blog */
     .blog-post-container {
-        padding: 2.5rem; /* Un poco más de padding */
-        background-color: #ffffff; /* Fondo blanco para el contenido */
-        border-radius: 0.5rem; /* Bordes redondeados */
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
-        margin-bottom: 2rem; /* Espacio debajo del post */
+        max-width: 900px; /* Ancho máximo para el contenido del blog */
+        margin: 40px auto; /* Centrar el contenedor con margen superior/inferior */
+        padding: 2.5rem; /* Espacio interno generoso */
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
     }
 
-    /* Estilos para el título del blog */
+    /* Título del blog */
     .blog-post-container h2 {
-        color: #343a40; /* Color oscuro para el título */
-        font-size: 2.5rem; /* Tamaño de fuente más grande */
-        font-weight: 700; /* Negrita */
-        margin-bottom: 0.75rem; /* Espacio debajo del título */
-        line-height: 1.2; /* Altura de línea */
+        color: #343a40;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+        text-align: center; /* Centrar el título del blog */
     }
 
-    /* Estilos para la información del autor y fecha */
+    /* Información del autor y fecha */
     .blog-post-container .text-muted {
-        font-size: 0.95rem; /* Tamaño de fuente ligeramente más grande */
-        color: #6c757d !important; /* Color gris más claro */
-        margin-bottom: 1.5rem; /* Más espacio debajo de la meta-información */
+        font-size: 0.95rem;
+        color: #6c757d !important;
+        margin-bottom: 1.5rem;
+        text-align: center; /* Centrar la información del autor/fecha */
     }
 
-    /* Estilos para el contenido generado por CKEditor */
-    /* Estas reglas son CRUCIALES para que el HTML de CKEditor se vea bien */
+    /* ********** Estilos para el CONTENIDO generado por TinyMCE (blog.contenido|safe) ********** */
+    .blog-content {
+        line-height: 1.7; /* Mejor legibilidad general */
+        font-size: 1.1rem; /* Tamaño de fuente para el texto del cuerpo */
+        color: #343a40; /* Color del texto principal */
+        word-wrap: break-word; /* ¡CORRECCIÓN: Rompe palabras muy largas! */
+        overflow-wrap: break-word; /* ¡CORRECCIÓN: Para mayor compatibilidad! */
+    }
+
     .blog-content p {
         margin-bottom: 1rem; /* Espacio entre párrafos */
-        line-height: 1.7; /* Altura de línea para mejor legibilidad */
-        font-size: 1.1rem; /* Tamaño de fuente para el texto del cuerpo */
-        color: #343a40; /* Color del texto del cuerpo */
     }
 
     .blog-content h1,
@@ -43,10 +52,11 @@
     .blog-content h4,
     .blog-content h5,
     .blog-content h6 {
-        margin-top: 2rem; /* Espacio superior para encabezados */
-        margin-bottom: 1rem; /* Espacio inferior para encabezados */
-        color: #495057; /* Color de los encabezados internos del blog */
-        font-weight: 600; /* Seminegrita para los encabezados */
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #495057;
+        font-weight: 600;
+        line-height: 1.2; /* Altura de línea para encabezados */
     }
 
     .blog-content h1 { font-size: 2.2rem; }
@@ -56,88 +66,150 @@
     .blog-content h5 { font-size: 1.2rem; }
     .blog-content h6 { font-size: 1rem; }
 
-
     .blog-content ul,
     .blog-content ol {
-        margin-bottom: 1rem; /* Espacio debajo de listas */
-        padding-left: 1.5rem; /* Sangría para listas */
+        margin-bottom: 1rem;
+        padding-left: 2rem; /* Aumenta la sangría para listas */
     }
 
     .blog-content li {
-        margin-bottom: 0.5rem; /* Espacio entre elementos de lista */
+        margin-bottom: 0.5rem;
         line-height: 1.6;
     }
 
     .blog-content a {
-        color: #007bff; /* Color de enlaces */
-        text-decoration: underline; /* Subrayado de enlaces */
+        color: #007bff;
+        text-decoration: underline;
     }
 
     .blog-content a:hover {
-        color: #0056b3; /* Color de enlaces al pasar el ratón */
-        text-decoration: none; /* Sin subrayado al pasar el ratón */
+        color: #0056b3;
+        text-decoration: none;
     }
 
     .blog-content blockquote {
-        border-left: 5px solid #007bff; /* Borde a la izquierda para citas */
-        padding: 1rem 1.2rem; /* Espacio interno */
-        margin: 1.5rem 0; /* Espacio exterior */
-        background-color: #e9f0f9; /* Fondo claro para citas */
-        font-style: italic; /* Cursiva para citas */
+        border-left: 5px solid #007bff;
+        padding: 1rem 1.2rem;
+        margin: 1.5rem 0;
+        background-color: #e9f0f9;
+        font-style: italic;
         color: #555;
         border-radius: 0.25rem;
     }
 
     .blog-content pre {
-        background-color: #f8f9fa; /* Fondo para bloques de código */
+        background-color: #e9ecef; /* Un gris un poco más oscuro para bloques de código */
         padding: 1rem;
         border-radius: 0.25rem;
-        overflow-x: auto; /* Desplazamiento horizontal para código largo */
+        overflow-x: auto;
+        word-wrap: break-word; /* Romper palabras largas en código */
     }
 
     .blog-content code {
         font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-        font-size: 0.875em;
+        font-size: 0.9em; /* Ligeramente más pequeño para código inline */
         color: #e83e8c;
     }
 
     .blog-content img {
-        max-width: 100%; /* Imágenes responsivas dentro del contenido */
+        max-width: 100%;
         height: auto;
-        border-radius: 0.5rem; /* Bordes redondeados para imágenes */
-        margin: 1.5rem 0; /* Espacio arriba y abajo de las imágenes */
-        display: block; /* Para centrar si quieres */
-        margin-left: auto;
-        margin-right: auto;
+        border-radius: 0.5rem;
+        margin: 1.5rem auto; /* Centrar imágenes del contenido */
+        display: block; /* Necesario para margin: auto */
+        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1); /* Sombra para imágenes */
     }
 
-    /* Estilos para el botón de eliminar */
+    /* Estilos para el video URL si existe una imagen de vista previa */
+    .blog-post-container .video-preview {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1.5rem auto;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+    }
+    .blog-post-container .btn-outline-secondary {
+        display: block; /* Botón de video en su propia línea */
+        width: fit-content; /* Ancho ajustado al contenido */
+        margin: 1rem auto; /* Centrar botón de video */
+    }
+
+
+    /* Botones de acción (Volver, Eliminar) */
+    .action-buttons-container {
+        max-width: 900px;
+        margin: 20px auto;
+        display: flex;
+        justify-content: space-between; /* Espacio entre los botones */
+        align-items: center;
+    }
+    .back-button, .delete-form .btn-danger {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.3rem;
+    }
     .delete-form {
-        display: inline-block; /* Para que el botón de eliminar no rompa la línea */
-        margin-left: 1rem; /* Espacio a la izquierda del botón de volver */
+        margin: 0; /* Eliminar margen si se usaba antes */
     }
 
-    /* Estilos para la sección de comentarios */
+
+    /* Comentarios */
     .comments-section {
-        margin-top: 3rem; /* Más espacio arriba de la sección de comentarios */
+        max-width: 900px;
+        margin: 3rem auto; /* Centrar sección de comentarios */
         padding-top: 2rem;
-        border-top: 1px solid #dee2e6; /* Línea divisoria */
+        border-top: 1px solid #dee2e6;
+    }
+
+    .comments-section h3 {
+        color: #343a40;
+        margin-bottom: 1.5rem;
+        font-size: 1.75rem;
     }
 
     .comment-form {
-        margin-bottom: 3rem; /* Espacio debajo del formulario de comentarios */
+        margin-bottom: 2rem; /* Espacio debajo del formulario de comentarios */
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .comment-form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    .comment-form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        box-sizing: border-box;
+    }
+    .comment-form button[type="submit"] {
+        padding: 10px 20px;
+        border-radius: 0.25rem;
     }
 
-    /* Estilos para el botón de volver */
-    .back-button {
-        font-size: 1rem; /* Tamaño de fuente para el botón de volver */
-        padding: 0.6rem 1.2rem; /* Relleno del botón */
-        border-radius: 0.3rem; /* Bordes ligeramente redondeados */
+    /* Estilos para los errores del formulario de comentarios */
+    .comment-form .alert-danger {
+        margin-bottom: 1rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.25rem;
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    .comment-form .alert-danger ul {
+        margin-bottom: 0;
+        padding-left: 1.5rem;
     }
 
 </style>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+{# Contenedor para los botones de acción #}
+<div class="action-buttons-container">
     <a href="{% url 'lista_blogs' %}" class="btn btn-primary back-button">
         <i class="bi bi-arrow-left"></i> Volver a la lista
     </a>
@@ -151,6 +223,7 @@
     {% endif %}
 </div>
 
+{# Contenedor principal del post del blog #}
 <div class="blog-post-container">
     <h2 class="mb-3">{{ blog.titulo }}</h2>
     <p class="text-muted">Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion|date:"d/m/Y H:i" }}</p>
@@ -202,7 +275,18 @@
                     </ul>
                 </div>
             {% endif %}
-            {{ form.as_p }}
+            
+            {# ********** INICIO DEL CAMBIO ********** #}
+            {# Renderizado individual del campo del formulario de comentario principal #}
+            <div class="mb-3">
+                <label for="{{ form.contenido.id_for_label }}" class="form-label visually-hidden">Tu comentario:</label>
+                {{ form.contenido }} {# Esto renderizará el textarea del comentario #}
+                {% if form.contenido.errors %}
+                    <div class="text-danger">{{ form.contenido.errors }}</div>
+                {% endif %}
+            </div>
+            {# ********** FIN DEL CAMBIO ********** #}
+
             <button type="submit" class="btn btn-success mt-3">
                 <i class="bi bi-chat-dots"></i> Comentar
             </button>
