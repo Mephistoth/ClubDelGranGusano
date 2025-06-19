@@ -1,133 +1,91 @@
-{# blogs/templates/blogs/crear_blog.html (o editar_blog.html) #}
-
 {% extends 'base.html' %}
-{% load blogs_filters %} {# ¡Necesitas cargar tu filtro add_class aquí también! #}
+{% load static %} {# No olvides cargar static si lo necesitas para otras cosas, aunque no lo usemos directamente para estos estilos #}
 
 {% block content %}
 <style>
+    /* Estilos para centrar el contenido y limitar el ancho del formulario */
     .form-container {
-        max-width: 700px;
-        margin: 40px auto;
-        padding: 2.5rem;
-        background-color: #ffffff;
-        border-radius: 0.5rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    }
-    .form-container h2 {
-        text-align: center;
-        color: #343a40;
-        margin-bottom: 2rem;
-    }
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-        color: #343a40;
-    }
-    .form-control { /* Estilo general para inputs/textareas de Bootstrap */
-        display: block;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-    .form-control:focus {
-        border-color: #80bdff;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
-    /* Estilos específicos para campos de tipo archivo (imagen) */
-    .form-control-file {
-        display: block;
-        width: 100%;
-        padding: 0.375rem 0.75rem; /* Menor padding para el input file */
+        max-width: 800px; /* Ancho máximo del formulario en pantallas grandes */
+        margin: 40px auto; /* Centra el contenedor y añade margen superior/inferior */
+        padding: 20px; /* Espacio interno del contenedor */
+        background-color: #f8f9fa; /* Un fondo ligero para el contenedor */
+        border-radius: 8px; /* Bordes ligeramente redondeados */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave para darle profundidad */
     }
 
-    .form-container button[type="submit"] {
-        display: block;
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #343a40;
+    }
+
+    /* Estilos para los párrafos generados por {{ form.as_p }} */
+    .form-container p {
+        margin-bottom: 1rem; /* Espacio entre cada campo/párrafo */
+    }
+
+    /* Estilos para las etiquetas */
+    .form-container label {
+        display: block; /* Hace que la etiqueta ocupe su propia línea */
+        margin-bottom: 0.5rem; /* Espacio entre la etiqueta y el campo */
+        font-weight: bold; /* Pone la etiqueta en negrita */
+        color: #495057;
+    }
+
+    /* Estilos para los campos de input y textarea (excluyendo TinyMCE explícitamente si es necesario, pero TinyMCE lo reemplaza) */
+    .form-container input[type="text"],
+    .form-container input[type="url"],
+    .form-container textarea { /* El textarea original */
         width: 100%;
         padding: 0.75rem;
-        margin-top: 2rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #fff;
-        background-color: #007bff;
-        border: none;
-        border-radius: 0.3rem;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        box-sizing: border-box; /* Incluye padding y border en el ancho total */
     }
+    
+    /* ESTILOS ESPECÍFICOS PARA EL EDITOR TINYMCE */
+    /* TinyMCE crea un iframe y elementos con prefijo tox- */
+    .tox-tinymce {
+        width: 100% !important; /* Asegura que el editor ocupe todo el ancho disponible en su contenedor */
+        max-width: none !important; /* Anula cualquier ancho máximo por defecto de TinyMCE */
+        box-sizing: border-box; /* Importante para el cálculo del ancho */
+        margin-bottom: 1rem; /* Espacio debajo del editor */
+    }
+
+    /* Ajustar la altura del editor si se necesita (opcional, configurado en settings.py) */
+    .tox-tinymce .tox-edit-area__iframe {
+        min-height: 250px; /* Altura mínima para el área de edición */
+    }
+
+    /* Estilo para el botón de enviar */
+    .form-container button[type="submit"] {
+        display: block; /* Hace que el botón ocupe su propia línea */
+        width: auto; /* Ocupa el ancho natural del botón */
+        margin-top: 20px; /* Margen superior para separarlo de los campos */
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
     .form-container button[type="submit"]:hover {
         background-color: #0056b3;
     }
-    /* Estilo para los errores del formulario */
-    .text-danger {
-        color: #dc3545;
-        font-size: 0.875em;
-        margin-top: 0.25rem;
-    }
+
 </style>
 
-<div class="form-container">
+<div class="form-container"> {# Nuevo contenedor para aplicar los estilos #}
     <h2>Crear Blog</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        {# Renderizar cada campo individualmente para aplicar estilos #}
-        <div class="form-group">
-            <label for="{{ form.titulo.id_for_label }}">Título:</label>
-            {{ form.titulo|add_class:"form-control" }}
-            {% if form.titulo.errors %}
-                <div class="text-danger">{{ form.titulo.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.contenido.id_for_label }}">Contenido:</label>
-            {{ form.contenido|add_class:"form-control" }} {# TinyMCE se inicializará aquí #}
-            {% if form.contenido.errors %}
-                <div class="text-danger">{{ form.contenido.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.imagen.id_for_label }}">Imagen:</label>
-            {{ form.imagen|add_class:"form-control-file" }} {# Clase específica para inputs de tipo file #}
-            {% if form.imagen.errors %}
-                <div class="text-danger">{{ form.imagen.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.video_url.id_for_label }}">URL del Video:</label>
-            {{ form.video_url|add_class:"form-control" }}
-            {% if form.video_url.errors %}
-                <div class="text-danger">{{ form.video_url.errors }}</div>
-            {% endif %}
-        </div>
-        
-        {# Errores no de campo (ej. si usas ModelForm.clean) #}
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                <ul>
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
+        {{ form.as_p }}
         <button type="submit">Publicar</button>
     </form>
 </div>
+
+{{ form.media }}
 
 {% endblock %}

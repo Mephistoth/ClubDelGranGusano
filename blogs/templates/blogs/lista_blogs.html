@@ -1,25 +1,115 @@
 {% extends 'base.html' %}
+{% load custom_tags %} {# Si custom_tags contiene algo que necesites aquí #}
+
 {% block content %}
-<h2>Blogs</h2>
+<style>
+    /* Estilos generales para la lista de blogs */
+    .blog-list-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-{% if user.is_authenticated %}
-    <a href="{% url 'crear_blog' %}" class="btn">Crear Blog</a>
-{% endif %}
+    .blog-list-container h2 {
+        text-align: center;
+        color: #343a40;
+        margin-bottom: 30px;
+    }
 
-{% for blog in blogs %}
-    <div>
-        <h3><a href="{% url 'detalle_blog' blog.id %}">{{ blog.titulo }}</a></h3>
-        <p>Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion }}</p>       
-        <p>{{ blog.contenido|truncatewords:20 }}</p>
-        {% if blog.imagen %}
-            <img src="{{ blog.imagen.url }}" style="max-width:300px;" alt="Imagen del blog">
-        {% else %}
-            <p>Imagen no disponible</p>
-        {% endif %}
+    .blog-item {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
 
-    </div>
-    <hr>
-{% empty %}
-    <p>No hay blogs disponibles.</p>
-{% endfor %}
+    .blog-item:last-child {
+        border-bottom: none; /* No hay borde en el último elemento */
+    }
+
+    .blog-item h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+    }
+
+    .blog-item h3 a {
+        text-decoration: none;
+        color: #007bff; /* Color para el título del blog */
+    }
+
+    .blog-item h3 a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+    .blog-item .meta-info {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+
+    .blog-item .blog-summary {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #343a40;
+        margin-bottom: 1rem;
+    }
+
+    .blog-item img {
+        max-width: 100%; /* Asegura que la imagen no desborde */
+        height: auto;
+        border-radius: 4px;
+        margin-top: 1rem;
+        display: block; /* Para centrar si es necesario con margin: auto */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .btn-create-blog {
+        display: block;
+        width: fit-content;
+        margin: 0 auto 30px auto; /* Centrar el botón y darle margen inferior */
+        padding: 10px 20px;
+        background-color: #28a745; /* Verde para crear */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background-color 0.2s ease-in-out;
+    }
+    .btn-create-blog:hover {
+        background-color: #218838;
+    }
+</style>
+
+<div class="blog-list-container">
+    <h2>Blogs Disponibles</h2>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'crear_blog' %}" class="btn-create-blog">Crear Nuevo Blog</a>
+    {% endif %}
+
+    {% for blog in blogs %}
+        <div class="blog-item">
+            <h3><a href="{% url 'detalle_blog' blog.id %}">{{ blog.titulo }}</a></h3>
+            <p class="meta-info">Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion|date:"d/m/Y H:i" }}</p>
+            
+            <div class="blog-summary">
+                {# AQUÍ ES LA CORRECCIÓN CLAVE: striptags antes de truncatewords #}
+                <p>{{ blog.contenido|striptags|truncatewords:30 }}</p>
+            </div>
+
+            {% if blog.imagen %}
+                <img src="{{ blog.imagen.url }}" alt="Imagen del blog: {{ blog.titulo }}">
+            {% else %}
+                <p class="text-muted">Imagen no disponible</p>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No hay blogs disponibles.</p>
+    {% endfor %}
+</div>
 {% endblock %}

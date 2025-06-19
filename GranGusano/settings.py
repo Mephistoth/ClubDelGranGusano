@@ -115,14 +115,13 @@ else:
             'PORT': '5432',
         }
     }
-    
-# ─── CONFIGURACIÓN DE TinyMCE ──────────────────────────────────────────────
+
 TINYMCE_DEFAULT_CONFIG = {
     'height': 300,
     'menubar': False,
-    'plugins': 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+    'plugins': 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
     'toolbar': 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-    'language': 'es', # Configura el idioma a español
+    'language': 'es', 
 }
 # ─── STATIC Y MEDIA ────────────────────────────────────────────────────────────
 STATIC_URL = '/static/'
