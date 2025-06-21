@@ -3,7 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Videollamada(models.Model):
-    fecha_creacion = models.DateTimeField(auto_now_add=True)        # Fecha y hora de creación automática:contentReference[oaicite:0]{index=0}
+    fecha_creacion = models.DateTimeField(auto_now_add=True)        # Fecha y hora de creación automática:contentReference[oaicite:0]{index=0}}
+    nombre = models.CharField("Nombre de la sala", max_length=100)
     creador = models.ForeignKey(User, on_delete=models.CASCADE)  # Usuario que crea la sala:contentReference[oaicite:1]{index=1}
     codigo = models.CharField(
         max_length = 8,

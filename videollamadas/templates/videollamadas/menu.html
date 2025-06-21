@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .button-container div {
+      text-align: center;
+    }
+
+    .menu-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 8px;
+      display: block;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .menu-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Estilo de los iconos */
+    .menu-icon {
+      width: 40px;
+      height: 40px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+  </style>
+
+  <h2 style="text-align: center;">Menú de Videollamadas</h2>
+
+  <div class="button-container">
+    <div>
+      <img src="path/to/crear-sala-icon.png" alt="Crear Sala" class="menu-icon">
+      <a href="{% url 'videollamadas:crear_sala' %}" class="menu-button">Crear nueva sala</a>
+    </div>
+
+    <div>
+      <img src="path/to/ver-salas-icon.png" alt="Ver Salas" class="menu-icon">
+      <a href="{% url 'videollamadas:lista_salas' %}" class="menu-button">Ver salas públicas</a>
+    </div>
+
+    <div>
+      <img src="path/to/unirse-sala-icon.png" alt="Unirse a Sala" class="menu-icon">
+      <a href="{% url 'videollamadas:unirse_sala' %}" class="menu-button">Unirse a sala por código</a>
+    </div>
+  </div>
+{% endblock %}
