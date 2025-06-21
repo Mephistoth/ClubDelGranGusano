@@ -1,119 +1,136 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
+{% block title %}Inicio - Club del Gran Gusano{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Inicio - Club del Gran Gusano</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/chatbotcito.css' %}">
-</head>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chatbotcito.css' %}">
+{% endblock %}
 
-<body>
+{% block content %}
+<div class="home-container">
 
-    <!-- Aquí se incluye el navbar en cada página donde lo necesites -->
-    {% include 'account/navbar.html' %}
+  <div class="hero">
+    <img src="/media/comunidad.png" alt="Comunidad" class="hero-image">
+    <div class="hero-text">Bienvenido a nuestra comunidad</div>
+  </div>
 
-    <!-- El contenido de la página -->
-    <h1>Bienvenido al Club del Gran Gusano</h1>
-    <p>Esta es la página de inicio.</p>
-
-    {% if user.is_authenticated %}
-    <button class="chat-toggle-btn" onclick="toggleChat()">Chat</button>
-
-    <div id="chatContainer" class="chat-container">
-        <div class="chat-header">
-            Chatbot
-            <button style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;"
-                onclick="toggleChat()">&times;</button>
-        </div>
-        <div class="chat-body" id="chatBody"></div>
-        <div class="chat-footer">
-            <form id="chatForm" onsubmit="sendMessage(event)">
-                <input type="text" id="chatMessage" placeholder="Escribe un mensaje..." style="width: 80%;" required>
-                <button type="submit">Enviar</button>
-            </form>
-        </div>
+  <div class="side-columns">
+  <h4>Últimas Publicaciones</h4>
+  <ul>
+    {% for publicacion in ultimas_publicaciones %}
+      <li><a href="{% url 'detalle_blog' publicacion.id %}">{{ publicacion.titulo }}</a></li>
+    {% empty %}
+      <li>No hay publicaciones disponibles.</li>
+    {% endfor %}
+  </ul>
     </div>
-    {% endif %}
 
+</div>
 
-    <script>
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+<!-- Sección de presentación -->
+<div class="about-club">
+  <h2>Sobre El Club del Gran Gusano</h2>
+  <p>
+    El club del gran gusano es una organización sin fines de lucro dedicada a difundir conocimientos a 
+    niños y adultos, fomentando buenas prácticas eco-ambientales para mejorar nuestro medio ambiente.
+    Su principal iniciativa es la implementación de un sistema de compostaje mediante el uso y 
+    mantención de lombrices californianas, promoviendo la sostenibilidad y el respeto por la naturaleza.
+  </p>
+</div>
+
+{% if user.is_authenticated %}
+<button class="chat-toggle-btn" onclick="toggleChat()">Chat</button>
+
+<div id="chatContainer" class="chat-container">
+  <div class="chat-header">
+    Chatbot
+    <button style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;"
+      onclick="toggleChat()">&times;</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-footer">
+    <form id="chatForm" onsubmit="sendMessage(event)">
+      <input type="text" id="chatMessage" placeholder="Escribe un mensaje..." style="width: 80%;" required>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
+        return cookieValue;
+    }
 
-        function toggleChat() {
-            const chatContainer = document.getElementById('chatContainer');
+    function toggleChat() {
+        const chatContainer = document.getElementById('chatContainer');
+        const chatBody = document.getElementById('chatBody');
+        chatContainer.classList.toggle('open');
+
+        if (chatContainer.classList.contains('open')) {
+            if (!chatBody.innerHTML) {
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.textContent = "Bot: ¡Hola! Pregúntame lo que quieras sobre lombrices, compostaje o cualquier otro tema.";
+                welcomeMsg.style.padding = "5px 0";
+                welcomeMsg.style.backgroundColor = "#f0f0f0";
+                chatBody.appendChild(welcomeMsg);
+            }
+        }
+    }
+
+    function sendMessage(e) {
+        e.preventDefault();
+        const input = document.getElementById('chatMessage');
+        const message = input.value.trim();
+        if (message) {
             const chatBody = document.getElementById('chatBody');
-            chatContainer.classList.toggle('open');
 
-            if (chatContainer.classList.contains('open')) {
-                // Mostrar bienvenida solo si está vacío
-                if (!chatBody.innerHTML) {
-                    const welcomeMsg = document.createElement('div');
-                    welcomeMsg.textContent = "Bot: ¡Hola! Pregúntame lo que quieras sobre lombrices, compostaje o cualquier otro tema.";
-                    welcomeMsg.style.padding = "5px 0";
-                    welcomeMsg.style.backgroundColor = "#f0f0f0";
-                    chatBody.appendChild(welcomeMsg);
-                }
-            }
-        }
+            const userMsg = document.createElement('div');
+            userMsg.textContent = "Tú: " + message;
+            userMsg.style.padding = "5px 0";
+            chatBody.appendChild(userMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
 
-        function sendMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatMessage');
-            const message = input.value.trim();
-            if (message) {
-                const chatBody = document.getElementById('chatBody');
+            const csrftoken = getCookie('csrftoken');
 
-                const userMsg = document.createElement('div');
-                userMsg.textContent = "Tú: " + message;
-                userMsg.style.padding = "5px 0";
-                chatBody.appendChild(userMsg);
-                chatBody.scrollTop = chatBody.scrollHeight;
-
-                const csrftoken = getCookie('csrftoken');
-
-                fetch("{% url 'send_message' %}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: 'message=' + encodeURIComponent(message)
+            fetch("{% url 'send_message' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: 'message=' + encodeURIComponent(message)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const botReply = document.createElement('div');
+                    botReply.textContent = "Bot: " + data.response;
+                    botReply.style.padding = "5px 0";
+                    botReply.style.backgroundColor = "#f0f0f0";
+                    chatBody.appendChild(botReply);
+                    chatBody.scrollTop = chatBody.scrollHeight;
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        const botReply = document.createElement('div');
-                        botReply.textContent = "Bot: " + data.response;
-                        botReply.style.padding = "5px 0";
-                        botReply.style.backgroundColor = "#f0f0f0";
-                        chatBody.appendChild(botReply);
-                        chatBody.scrollTop = chatBody.scrollHeight; // Mover el scroll aquí
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                .catch(error => {
+                    console.error('Error:', error);
+                });
 
-                input.value = '';
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
+            input.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
         }
-    </script>
-
-</body>
-
-</html>
+    }
+</script>
+{% endblock %}

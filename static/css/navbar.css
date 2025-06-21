@@ -1,6 +1,6 @@
 /* Estilos base */
 .navbar {
-    background-color: #111;
+    background-color: #111; /* Fondo oscuro */
     color: white;
     padding: 10px 20px;
 }
@@ -19,9 +19,12 @@
 }
 
 .navbar-logo-img {
-    width: 40px;
-    height: 40px;
+    width: 70px;          /* Tamaño de imagen actualizado */
+    height: 70px;
+    object-fit: cover;    /* Para que la imagen no se deforme */
     border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
 }
 
 .navbar-links {
@@ -33,6 +36,7 @@
 .navbar-link {
     color: white;
     text-decoration: none;
+    font-weight: bold;    /* Más énfasis en el texto */
 }
 
 .navbar-link:hover {
@@ -41,6 +45,7 @@
 
 .navbar-dropdown {
     position: relative;
+    display: inline-block;
 }
 
 .navbar-user {
@@ -48,33 +53,40 @@
     border: none;
     color: white;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.navbar-user:hover {
+    color: #ddd;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #222;
+    background-color: #333; /* Un poco más claro que #222 para contraste */
     min-width: 160px;
     z-index: 1;
     right: 0;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #575757;
 }
 
 .navbar-dropdown:hover .dropdown-content {
     display: block;
 }
 
-.dropdown-content a {
-    color: white;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #333;
-}
-
-/* Botón hamburguesa */
+/* Botón hamburguesa para móviles */
 .navbar-toggle {
     display: none;
     background-color: transparent;

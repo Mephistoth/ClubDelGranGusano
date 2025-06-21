@@ -5,6 +5,15 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ComentarioForm
 from django.contrib.auth.models import User
 
+def home(request):
+    ultimas_publicaciones = Blog.objects.filter(aprobado=True).order_by('-fecha_creacion')[:5]
+    return render(request, 'account/home.html', {'ultimas_publicaciones': ultimas_publicaciones})
+
+
+def detalle_publicacion(request, pk):
+    publicacion = get_object_or_404(Blog, pk=pk)
+    return render(request, 'blogs/detalle.html', {'publicacion': publicacion})
+
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def eliminar_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
