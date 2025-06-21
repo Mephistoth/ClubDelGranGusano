@@ -115,6 +115,7 @@ else:
             'PORT': '5432',
         }
     }
+ACCOUNT_ADAPTER = 'blogs.adapters.CustomAccountAdapter' 
 
 TINYMCE_DEFAULT_CONFIG = {
     'height': 300,
@@ -168,6 +169,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+SERVER_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # ─── VALIDADORES DE CONTRASEÑA ────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [

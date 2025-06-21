@@ -4,6 +4,43 @@ from .forms import BlogForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ComentarioForm
 from django.contrib.auth.models import User
+from .models import EmailBloqueado  
+from django.core.mail import send_mail
+from django.conf import settings
+
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def correos_bloqueados(request):
+    correos = EmailBloqueado.objects.all().order_by('email')
+    return render(request, 'blogs/correos_bloqueados.html', {'correos': correos})
+
+@user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
+def expulsar_usuario(request, user_id):
+    usuario = get_object_or_404(User, id=user_id)
+
+    if usuario.is_superuser:
+        return redirect('moderar_usuarios')
+    username = usuario.username
+    email = usuario.email
+
+    #  Enviar correo antes de eliminar
+    send_mail(
+        'Has sido expulsado de la comunidad',
+        (
+            f'Hola {username},\n\n'
+            'Te notificamos que tu cuenta en esta comunidad ha sido expulsada.\n'
+            'Si deseas más detalles, contáctanos.\n\n'
+            'Saludos, El Equipo de Moderación.'
+        ),
+        settings.DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
+
+    # Guardamos en la lista negra
+    EmailBloqueado.objects.get_or_create(email=email)
+
+    usuario.delete()
+    return redirect('moderar_usuarios')
 
 def home(request):
     ultimas_publicaciones = Blog.objects.filter(aprobado=True).order_by('-fecha_creacion')[:5]
@@ -87,14 +124,20 @@ def crear_blog(request):
     return render(request, 'blogs/crear_blog.html', {'form': form})
 
 
- # 18 de junio
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def moderar_usuarios(request):
     query = request.GET.get('q', '')
+    query_email = request.GET.get('q_email', '')
+
     if query:
         usuarios = User.objects.filter(username__icontains=query)
     else:
         usuarios = User.objects.all()
+
+    if query_email:
+        correos_bloqueados = EmailBloqueado.objects.filter(email__icontains=query_email).order_by('email')
+    else:
+        correos_bloqueados = EmailBloqueado.objects.all().order_by('email')
 
     total_usuarios = usuarios.count()
     usuarios_activos = usuarios.filter(is_active=True).count()
@@ -103,15 +146,12 @@ def moderar_usuarios(request):
         'usuarios': usuarios,
         'total_usuarios': total_usuarios,
         'usuarios_activos': usuarios_activos,
+        'correos_bloqueados': correos_bloqueados,
         'query': query,
+        'query_email': query_email,
     })
-
-# 18 de junio
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
-def expulsar_usuario(request, user_id):
-    usuario = get_object_or_404(User, id=user_id)
-    if usuario.is_superuser:
-        # Para evitar eliminar al superusuario
-        return redirect('moderar_usuarios')
-    usuario.delete()
+def desbloquear_email(request, correo_id):
+    correo = get_object_or_404(EmailBloqueado, id=correo_id)
+    correo.delete()
     return redirect('moderar_usuarios')

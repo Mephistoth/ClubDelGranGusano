@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<head></head>
 <style>
   .centrado {
     display: flex;
@@ -36,52 +37,107 @@
   }
 
   .buscador {
-    margin-top: 20px;
+    margin: 20px 0;
   }
 
   .resumen {
     margin-top: 10px;
     font-weight: bold;
   }
+
+  .mb-30 {
+    margin-bottom: 30px;
+  }
 </style>
 
 <div class="centrado">
     {% if user.is_superuser %}
-  <a href="{% url 'admin:index' %}" class="btn-admin-panel">Ir al panel de administración</a>
-{% endif %}
+      <a href="{% url 'admin:index' %}" class="btn-admin-panel">Ir al panel de administración</a>
+    {% endif %}
 
-  <h2>Moderación de Usuarios</h2>
+    <h2>Moderación de Usuarios</h2>
 
-  <form method="get" class="buscador">
-    <input type="text" name="q" placeholder="Buscar por nombre de usuario" value="{{ query }}">
-    <button type="submit">Buscar</button>
-  </form>
+    <details open>
+      <summary style="font-size: 1.2em; font-weight: bold; cursor: pointer;">
+        Lista de usuarios registrados
+      </summary>
 
-  <p class="resumen">Total: {{ total_usuarios }} | Activos: {{ usuarios_activos }}</p>
+      <form method="get" class="buscador">
+        <input type="text" name="q" placeholder="Buscar por nombre de usuario" value="{{ query }}">
+        <button type="submit">Buscar</button>
+      </form>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Email</th>
-        <th>Activo</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for user in usuarios %}
-        <tr>
-          <td>{{ user.username }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.is_active|yesno:"Sí,No" }}</td>
-          <td class="acciones">
-            {% if not user.is_superuser %}
-              <a href="{% url 'expulsar_usuario' user.id %}" onclick="return confirm('¿Seguro que deseas expulsar a {{ user.username }}?')">Expulsar</a>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      <p class="resumen">Total: {{ total_usuarios }} | Activos: {{ usuarios_activos }}</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for user in usuarios %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.is_active|yesno:"Sí,No" }}</td>
+            <td class="acciones">
+              {% if not user.is_superuser %}
+                <a href="{% url 'expulsar_usuario' user.id %}" 
+                   style="background-color: #dc3545;"
+                   onclick="return confirm('¿Seguro que deseas expulsar a {{ user.username }}?')">
+                  Expulsar
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </details>
+
+    <details style="margin-top: 30px;" open>
+      <summary style="font-size: 1.2em; font-weight: bold; cursor: pointer;">
+        Correos bloqueados (Lista negra)
+      </summary>
+
+      <form method="get" class="buscador">
+        <input type="text" name="q_email" placeholder="Buscar por correo electrónico" value="{{ query_email }}">
+        <button type="submit">Buscar</button>
+      </form>
+
+      {% if correos_bloqueados %}
+        <table class="mb-30">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for correo in correos_bloqueados %}
+              <tr>
+                <td>{{ correo.email }}</td>
+                <td class="acciones">
+                  <a href="{% url 'desbloquear_email' correo.id %}" 
+                     style="background-color: #28a745;"
+                     onclick="return confirm('¿Estás seguro que deseas desbloquear este correo?')">
+                    Desbloquear
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p style="margin: 15px 0 30px 0;">
+            No hay correos bloqueados actualmente.
+        </p>
+      {% endif %}
+
+    </details>
 </div>
 {% endblock %}

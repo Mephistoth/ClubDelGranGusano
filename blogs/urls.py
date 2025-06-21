@@ -12,6 +12,8 @@ urlpatterns = [
     path('blog/<int:blog_id>/eliminar/', views.eliminar_blog, name='eliminar_blog'),
     path('admin-usuarios/', views.moderar_usuarios, name='moderar_usuarios'),
     path('admin-usuarios/expulsar/<int:user_id>/', views.expulsar_usuario, name='expulsar_usuario'),
-  
+    path('moderacion/correos-bloqueados/', views.correos_bloqueados, name='correos_bloqueados'),
+    path('desbloquear_email/<int:correo_id>/', views.desbloquear_email, name='desbloquear_email'),
+
 
 ]

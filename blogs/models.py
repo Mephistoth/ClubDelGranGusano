@@ -2,6 +2,13 @@
 from django.db import models
 from django.contrib.auth.models import User # <-- Asegúrate de que User esté importado
 from tinymce.models import HTMLField # <--- ¡Importa el HTMLField de TinyMCE!
+from django.db import models
+
+class EmailBloqueado(models.Model):
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.email
 
 class Blog(models.Model):
     titulo = models.CharField(max_length=200)
@@ -31,3 +38,5 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f'Comentario de {self.autor.username} en {self.blog.titulo}'
+    
+    
