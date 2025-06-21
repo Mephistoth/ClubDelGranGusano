@@ -10,9 +10,6 @@ def home(request):
     return render(request, 'account/home.html', {'ultimas_publicaciones': ultimas_publicaciones})
 
 
-def detalle_publicacion(request, pk):
-    publicacion = get_object_or_404(Blog, pk=pk)
-    return render(request, 'blogs/detalle.html', {'publicacion': publicacion})
 
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def eliminar_blog(request, blog_id):

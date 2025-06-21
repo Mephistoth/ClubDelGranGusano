@@ -1,26 +1,29 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Perfil de Usuario</title>
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
-</head>
-<body>
-    <h1>Perfil de {{ user.first_name }}</h1>
 
-    <div class="perfil-container">
-        {% if user.profile.foto %}
-            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="foto-perfil">
-        {% else %}
-            <img src="{% static 'img/default-user.png' %}" alt="Foto por defecto" class="foto-perfil">
-        {% endif %}
-        <h2>Información del Usuario</h2>
-        <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
-        <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
-        <a href="{% url 'editar_perfil' %}">Editar Perfil</a> 
-    </div>
+{% block title %}Perfil de {{ user.first_name }}{% endblock %}
 
-    <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
-</body>
-</html>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="perfil-page">
+  <h1>Perfil de {{ user.first_name }}</h1>
+
+  <div class="perfil-container">
+      {% if user.profile.foto %}
+          <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="foto-perfil">
+      {% else %}
+          <img src="{% static 'img/default-user.png' %}" alt="Foto por defecto" class="foto-perfil">
+      {% endif %}
+      <h2>Información del Usuario</h2>
+      <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+      <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
+      <a href="{% url 'editar_perfil' %}">Editar Perfil</a>
+  </div>
+
+  <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
+</div>
+{% endblock %}
+
