@@ -11,7 +11,7 @@ body {
     height: 100vh;
     
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-                url('../img/Fondo_Login.jpg');
+                url('https://res.cloudinary.com/dez8ac5uv/image/upload/v1750469933/Fondo_Login_sgcccy.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
