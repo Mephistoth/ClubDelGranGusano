@@ -7,6 +7,10 @@ from django.http import HttpResponseForbidden
 from .utils import generar_token_jitsi
 
 @login_required
+def menu(request):
+    return render(request, 'videollamadas/menu.html')
+
+@login_required
 def crear_sala(request):
     # Límite de 10 salas activas
     num_activas = Videollamada.objects.filter(activa=True).count()
@@ -26,6 +30,18 @@ def crear_sala(request):
         form = VideollamadaForm()
 
     return render(request, 'videollamadas/crear_sala.html', {'form': form})
+
+@login_required
+def eliminar_sala(request, codigo):
+    sala = get_object_or_404(Videollamada, codigo=codigo)
+    
+    if sala.creador != request.user:
+        messages.error(request, "No tienes permiso para eliminar esta sala.")
+        return redirect('videollamadas:lista_salas')
+    
+    sala.delete()
+    messages.success(request, "Sala eliminada correctamente.")
+    return redirect('videollamadas:lista_salas')
 
 @login_required
 def lista_salas(request):
