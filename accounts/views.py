@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
-from .forms import PerfilForm
 from django.contrib.auth.decorators import login_required
-
+from .forms import PerfilForm
+from .models import Profile
+import cloudinary.uploader
 
 def home(request):
     return render(request, 'account/home.html')
@@ -18,19 +19,24 @@ def editar_perfil(request):
         if form.is_valid():
             user = form.save(commit=False)
 
-            # Mantener la lógica de la contraseña
+            # Cambiar contraseña si se proporcionó
             password1 = form.cleaned_data.get('password1')
             if password1:
                 user.set_password(password1)
 
             user.save()
 
-            # Guardar foto y demás (usando form.save para subir foto)
-            form.save()
+            # Procesar foto de perfil solo si hay archivo válido
+            foto = form.cleaned_data.get('foto')
+            if foto and foto.size:
+                profile, _ = Profile.objects.get_or_create(user=user)
+                upload_result = cloudinary.uploader.upload(foto)
+                profile.foto = upload_result.get('secure_url', '')
+                profile.save()
 
-            update_session_auth_hash(request, user)
+            update_session_auth_hash(request, user)  # mantener sesión activa tras cambio de contraseña
             return redirect('perfil')
     else:
         form = PerfilForm(instance=request.user)
-    return render(request, 'account/editar_perfil.html', {'form': form})
 
+    return render(request, 'account/editar_perfil.html', {'form': form})
