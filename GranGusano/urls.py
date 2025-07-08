@@ -4,7 +4,7 @@ from accounts.views import home, perfil_usuario, editar_perfil
 from django.conf import settings
 from django.conf.urls.static import static
 from chat import views as chat_views
-from blogs.views import home  # <-- Importamos la vista
+from blogs.views import home, tinymce_image_upload   # <-- Importamos la vista
 from accounts.views import eliminar_cuenta
 
 urlpatterns = [
