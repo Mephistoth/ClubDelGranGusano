@@ -5,11 +5,12 @@
 {% load blogs_filters %} 
 
 <style>
+    /* (Tu CSS completo original) */
     /* Contenedor principal para el detalle del blog */
     .blog-post-container {
-        max-width: 900px; /* Ancho máximo para el contenido del blog */
-        margin: 40px auto; /* Centrar el contenedor con margen superior/inferior */
-        padding: 2.5rem; /* Espacio interno generoso */
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 2.5rem;
         background-color: #ffffff;
         border-radius: 0.5rem;
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
@@ -23,7 +24,7 @@
         font-weight: 700;
         margin-bottom: 0.75rem;
         line-height: 1.2;
-        text-align: center; /* Centrar el título del blog */
+        text-align: center;
     }
 
     /* Información del autor y fecha */
@@ -31,20 +32,20 @@
         font-size: 0.95rem;
         color: #6c757d !important;
         margin-bottom: 1.5rem;
-        text-align: center; /* Centrar la información del autor/fecha */
+        text-align: center;
     }
 
-    /* ********** Estilos para el CONTENIDO generado por TinyMCE (blog.contenido|safe) ********** */
+    /* ********** Estilos para el CONTENIDO generado por TinyMCE ********** */
     .blog-content {
-        line-height: 1.7; /* Mejor legibilidad general */
-        font-size: 1.1rem; /* Tamaño de fuente para el texto del cuerpo */
-        color: #343a40; /* Color del texto principal */
-        word-wrap: break-word; /* ¡CORRECCIÓN: Rompe palabras muy largas! */
-        overflow-wrap: break-word; /* ¡CORRECCIÓN: Para mayor compatibilidad! */
+        line-height: 1.7;
+        font-size: 1.1rem;
+        color: #343a40;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .blog-content p {
-        margin-bottom: 1rem; /* Espacio entre párrafos */
+        margin-bottom: 1rem;
     }
 
     .blog-content h1,
@@ -57,7 +58,7 @@
         margin-bottom: 1rem;
         color: #495057;
         font-weight: 600;
-        line-height: 1.2; /* Altura de línea para encabezados */
+        line-height: 1.2;
     }
 
     .blog-content h1 { font-size: 2.2rem; }
@@ -70,7 +71,7 @@
     .blog-content ul,
     .blog-content ol {
         margin-bottom: 1rem;
-        padding-left: 2rem; /* Aumenta la sangría para listas */
+        padding-left: 2rem;
     }
 
     .blog-content li {
@@ -99,16 +100,16 @@
     }
 
     .blog-content pre {
-        background-color: #e9ecef; /* Un gris un poco más oscuro para bloques de código */
+        background-color: #e9ecef;
         padding: 1rem;
         border-radius: 0.25rem;
         overflow-x: auto;
-        word-wrap: break-word; /* Romper palabras largas en código */
+        word-wrap: break-word;
     }
 
     .blog-content code {
         font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-        font-size: 0.9em; /* Ligeramente más pequeño para código inline */
+        font-size: 0.9em;
         color: #e83e8c;
     }
 
@@ -116,12 +117,11 @@
         max-width: 100%;
         height: auto;
         border-radius: 0.5rem;
-        margin: 1.5rem auto; /* Centrar imágenes del contenido */
-        display: block; /* Necesario para margin: auto */
-        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1); /* Sombra para imágenes */
+        margin: 1.5rem auto;
+        display: block;
+        box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
     }
 
-    /* Estilos para el video URL si existe una imagen de vista previa */
     .blog-post-container .video-preview {
         max-width: 100%;
         height: auto;
@@ -131,34 +131,34 @@
         box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
     }
     .blog-post-container .btn-outline-secondary {
-        display: block; /* Botón de video en su propia línea */
-        width: fit-content; /* Ancho ajustado al contenido */
-        margin: 1rem auto; /* Centrar botón de video */
+        display: block;
+        width: fit-content;
+        margin: 1rem auto;
     }
 
-
-    /* Botones de acción (Volver, Eliminar) */
+    /* Botones de acción */
     .action-buttons-container {
         max-width: 900px;
         margin: 20px auto;
         display: flex;
-        justify-content: space-between; /* Espacio entre los botones */
+        justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
-    .back-button, .delete-form .btn-danger {
+    .back-button, .delete-form .btn-danger, .edit-button {
         font-size: 1rem;
         padding: 0.6rem 1.2rem;
         border-radius: 0.3rem;
     }
     .delete-form {
-        margin: 0; /* Eliminar margen si se usaba antes */
+        margin: 0;
     }
-
 
     /* Comentarios */
     .comments-section {
         max-width: 900px;
-        margin: 3rem auto; /* Centrar sección de comentarios */
+        margin: 3rem auto;
         padding-top: 2rem;
         border-top: 1px solid #dee2e6;
     }
@@ -170,7 +170,7 @@
     }
 
     .comment-form {
-        margin-bottom: 2rem; /* Espacio debajo del formulario de comentarios */
+        margin-bottom: 2rem;
         padding: 1.5rem;
         background-color: #f8f9fa;
         border-radius: 0.5rem;
@@ -192,8 +192,6 @@
         padding: 10px 20px;
         border-radius: 0.25rem;
     }
-
-    /* Estilos para los errores del formulario de comentarios */
     .comment-form .alert-danger {
         margin-bottom: 1rem;
         padding: 0.75rem 1.25rem;
@@ -206,25 +204,34 @@
         margin-bottom: 0;
         padding-left: 1.5rem;
     }
-
 </style>
 
-{# Contenedor para los botones de acción #}
 <div class="action-buttons-container">
     <a href="{% url 'lista_blogs' %}" class="btn btn-primary back-button">
         <i class="bi bi-arrow-left"></i> Volver a la lista
     </a>
-    {% if user.is_staff or user|has_group:"educador" %}
-    <form method="POST" action="{% url 'eliminar_blog' blog.id %}" onsubmit="return confirm('¿Estás seguro de eliminar esta publicación?');" class="delete-form">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">
-            <i class="bi bi-trash"></i> Eliminar publicación
-        </button>
-    </form>
-    {% endif %}
+
+    <div style="display: flex; gap: 10px;">
+        {% if user == blog.autor or user.is_superuser %}
+        <form method="GET" action="{% url 'editar_blog' blog.id %}" class="delete-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-pencil-square"></i> Editar publicación
+            </button>
+        </form>
+        {% endif %}
+
+        {% if user.is_staff or user|has_group:"educador" %}
+        <form method="POST" action="{% url 'eliminar_blog' blog.id %}" onsubmit="return confirm('¿Estás seguro de eliminar esta publicación?');" class="delete-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash"></i> Eliminar publicación
+            </button>
+        </form>
+        {% endif %}
+    </div>
 </div>
 
-{# Contenedor principal del post del blog #}
 <div class="blog-post-container">
     <h2 class="mb-3">{{ blog.titulo }}</h2>
     <p class="text-muted">Publicado por {{ blog.autor.username }} el {{ blog.fecha_creacion|date:"d/m/Y H:i" }}</p>
@@ -276,18 +283,13 @@
                     </ul>
                 </div>
             {% endif %}
-            
-            {# ********** INICIO DEL CAMBIO ********** #}
-            {# Renderizado individual del campo del formulario de comentario principal #}
             <div class="mb-3">
                 <label for="{{ form.contenido.id_for_label }}" class="form-label visually-hidden">Tu comentario:</label>
-                {{ form.contenido }} {# Esto renderizará el textarea del comentario #}
+                {{ form.contenido }}
                 {% if form.contenido.errors %}
                     <div class="text-danger">{{ form.contenido.errors }}</div>
                 {% endif %}
             </div>
-            {# ********** FIN DEL CAMBIO ********** #}
-
             <button type="submit" class="btn btn-success mt-3">
                 <i class="bi bi-chat-dots"></i> Comentar
             </button>
@@ -297,7 +299,6 @@
         <p class="text-muted">Debes <a href="{% url 'account_login' %}" class="text-decoration-underline">iniciar sesión</a> para comentar.</p>
     {% endif %}
 </div>
-
 
 <script>
     function mostrarRespuesta(id) {
