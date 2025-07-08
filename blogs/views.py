@@ -8,6 +8,8 @@ from .models import EmailBloqueado
 from django.core.mail import send_mail
 from django.conf import settings
 
+from django.contrib import messages
+
 import uuid
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -176,3 +178,29 @@ def tinymce_image_upload(request):
     path = default_storage.save(f'blogs/uploads/{filename}', ContentFile(upload.read()))
     url = default_storage.url(path)
     return JsonResponse({'location': url})
+
+@login_required
+def editar_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    # Solo el autor puede editar
+    if blog.autor != request.user:
+        messages.error(request, "No tienes permisos para editar esta publicación.")
+        return redirect('detalle_blog', blog_id=blog.id)
+
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            blog_editado = form.save(commit=False)
+            blog_editado.aprobado = False  # vuelve a pasar moderación
+            blog_editado.save()
+            messages.success(request, "Tu publicación ha sido actualizada y enviada a moderación.")
+            return redirect('detalle_blog', blog_id=blog.id)
+    else:
+        form = BlogForm(instance=blog)
+
+    return render(request, 'blogs/crear_blog.html', {
+        'form': form,
+        'editar': True,   # bandera para la plantilla
+        'blog': blog,     # por si quieres usar datos adicionales
+    })
