@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #d2b48c;
+    background-color: #FDFAF6;
 }
 main {
     flex: 1;

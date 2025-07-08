@@ -5,12 +5,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from chat import views as chat_views
 from blogs.views import home  # <-- Importamos la vista
+from accounts.views import eliminar_cuenta
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),  # allauth maneja login, logout, signup
     path('perfil/', perfil_usuario, name='perfil'),
     path('perfil/editar/', editar_perfil, name='editar_perfil'),
+    path('perfil/eliminar/', eliminar_cuenta, name='eliminar_cuenta'),
     path('', home, name='home'),
     path('chatbot/', include('chatbotcito.urls')),
     path('chat/', chat_views.chat_room, name='chat'),
