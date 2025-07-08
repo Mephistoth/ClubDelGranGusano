@@ -8,6 +8,12 @@ from .models import EmailBloqueado
 from django.core.mail import send_mail
 from django.conf import settings
 
+import uuid
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 @user_passes_test(lambda u: u.is_staff or u.groups.filter(name='educador').exists())
 def correos_bloqueados(request):
     correos = EmailBloqueado.objects.all().order_by('email')
@@ -155,3 +161,18 @@ def desbloquear_email(request, correo_id):
     correo = get_object_or_404(EmailBloqueado, id=correo_id)
     correo.delete()
     return redirect('moderar_usuarios')
+
+@csrf_exempt
+def tinymce_image_upload(request):
+    upload = request.FILES.get('file')
+    if not upload:
+        return JsonResponse({'error': 'No se recibió archivo'}, status=400)
+
+    # (Opcional) Validaciones:
+    # if upload.size > 2*1024*1024: return JsonResponse({'error': 'Archivo demasiado grande'}, status=400)
+    # if not upload.content_type.startswith('image/'): return JsonResponse({'error': 'Sólo imágenes'}, status=400)
+
+    filename = f"{uuid.uuid4().hex}-{upload.name}"
+    path = default_storage.save(f'blogs/uploads/{filename}', ContentFile(upload.read()))
+    url = default_storage.url(path)
+    return JsonResponse({'location': url})
