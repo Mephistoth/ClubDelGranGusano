@@ -18,6 +18,7 @@ urlpatterns = [
     path('chat/', chat_views.chat_room, name='chat'),
     path('videollamadas/', include('videollamadas.urls', namespace='videollamadas')),
     path('blogs/', include('blogs.urls')),
+    path('tinymce/upload/', tinymce_image_upload, name='tinymce_image_upload'),
     path('tinymce/', include('tinymce.urls')), 
     path('', home, name='home'),   
 
