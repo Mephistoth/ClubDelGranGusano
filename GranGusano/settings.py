@@ -149,6 +149,8 @@ ACCOUNT_FORMS = {
     'login': 'accounts.forms.CustomLoginForm',
 }
 
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'default@example.com')
+ACCOUNT_DEFAULT_FROM_EMAIL = os.getenv('ACCOUNT_DEFAULT_FROM_EMAIL', 'default@example.com')
 
 
 ACCOUNT_EMAIL_VERIFICATION = "mandatory" if IS_RENDER else "none"
