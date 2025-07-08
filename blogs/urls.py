@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.lista_blogs, name='lista_blogs'),
     path('crear/', views.crear_blog, name='crear_blog'),
+    path('<int:blog_id>/editar/', views.editar_blog, name='editar_blog'),
     path('<int:blog_id>/', views.detalle_blog, name='detalle_blog'),
     # Rutas para moderación
     path('admin-blogs/', views.moderar_blogs, name='moderar_blogs'),
