@@ -4,11 +4,7 @@
 {% block content %}
   <h2>Crear nueva sala</h2>
 
-  {% if messages %}
-    {% for msg in messages %}
-      <div class="alert">{{ msg }}</div>
-    {% endfor %}
-  {% endif %}
+
 
   <form method="post">
     {% csrf_token %}
