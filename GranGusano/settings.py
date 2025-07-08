@@ -119,10 +119,32 @@ ACCOUNT_ADAPTER = 'blogs.adapters.CustomAccountAdapter'
 
 TINYMCE_DEFAULT_CONFIG = {
     'height': 300,
-    'menubar': False,
-    'plugins': 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
-    'toolbar': 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-    'language': 'es', 
+    'width': '100%',
+    'menubar': True,  # Habilita menú para “Insert” y “File”
+    'language': 'es',
+
+    'plugins': (
+        'advlist autolink lists link image charmap preview anchor '
+        'searchreplace visualblocks code fullscreen insertdatetime '
+        'media table paste help wordcount'
+    ),
+
+    'toolbar': (
+        'undo redo | formatselect | bold italic backcolor | '
+        'alignleft aligncenter alignright alignjustify | '
+        'bullist numlist outdent indent | '
+        'link image media | removeformat | code'
+    ),
+
+    # ==== CONFIGURACIÓN DE IMÁGENES ====
+    'automatic_uploads': True,
+    'paste_data_images': True,           # Permite pegar imágenes en base64
+    'file_picker_types': 'image',        # Sólo “picker” de imágenes
+    'images_upload_url': '/tinymce/upload/',
+
+    # Opcionales: habilitar título y pie de foto
+    'image_title': True,
+    'image_caption': True,
 }
 # ─── STATIC Y MEDIA ────────────────────────────────────────────────────────────
 STATIC_URL = '/static/'
