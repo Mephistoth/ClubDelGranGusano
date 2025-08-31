@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Centrado completo con flexbox -->
+<div class="d-flex justify-content-center align-items-center flex-column min-vh-100">
+  <h2 class="text-center mb-4">Moderar Blogs</h2>
+
+  {% if blogs_pendientes %}
+    <div class="table-responsive w-100" style="max-width: 900px;">
+      <table class="table table-striped text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for blog in blogs_pendientes %}
+            <tr>
+              <td>{{ blog.titulo }}</td>
+              <td>{{ blog.autor.username }}</td>
+              <td>{{ blog.fecha_creacion|date:"d/m/Y" }}</td>
+              <td>
+                <a href="{% url 'detalle_blog' blog.id %}" class="btn btn-sm btn-info me-2">Ver</a>
+                <a href="{% url 'aprobar_blog' blog.id %}" class="btn btn-sm btn-success me-2">Aprobar</a>
+                <a href="{% url 'rechazar_blog' blog.id %}" class="btn btn-sm btn-danger">Rechazar</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="lead text-muted">No hay blogs pendientes de aprobación.</p>
+  {% endif %}
+</div>
+{% endblock %}

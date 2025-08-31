@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h2>Crear nueva sala</h2>
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Crear Sala</button>
+  </form>
+
+  <p><a href="{% url 'videollamadas:lista_salas' %}">Ver salas públicas</a></p>
+{% endblock %}

@@ -1,0 +1,38 @@
+{# templates/base.html #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}El Club del Gran Gusano{% endblock %}</title>
+
+  {# aquí cargan los CSS globales de tu proyecto (si los tuvieras) #}
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+  {% block extra_css %}
+  
+  {% endblock %}
+
+</head>
+<body>
+  {% include 'account/navbar.html' %}
+
+  <main>
+    {% block content %}
+
+    {% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>PROGRAMACION WEB 2024©</p>
+  </footer>
+
+  {# aquí cargarías JS globales #}
+
+  {% block extra_js %}
+  
+  {% endblock %}
+  
+</body>
+</html>
