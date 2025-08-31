@@ -1,0 +1,120 @@
+/* Estilos base */
+.navbar {
+    background-color: #111; /* Fondo oscuro */
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-logo-img {
+    width: 70px;          /* Tamaño de imagen actualizado */
+    height: 70px;
+    object-fit: cover;    /* Para que la imagen no se deforme */
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;    /* Más énfasis en el texto */
+}
+
+.navbar-link:hover {
+    text-decoration: underline;
+}
+
+.navbar-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.navbar-user {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.navbar-user:hover {
+    color: #ddd;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333; /* Un poco más claro que #222 para contraste */
+    min-width: 160px;
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #575757;
+}
+
+.navbar-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Botón hamburguesa para móviles */
+.navbar-toggle {
+    display: none;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Responsivo para celulares */
+@media screen and (max-width: 768px) {
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

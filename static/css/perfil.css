@@ -1,0 +1,39 @@
+
+
+.perfil-page .perfil-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    text-align: center;
+    margin: 40px auto;
+}
+
+.perfil-page .perfil-container p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.perfil-page a {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.perfil-page a:hover {
+    background-color: #0056b3;
+}
+
+.perfil-page .foto-perfil {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc;
+    margin-bottom: 20px;
+}

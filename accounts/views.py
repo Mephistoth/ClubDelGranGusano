@@ -1,50 +1,69 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-from .forms import CustomLoginForm, PerfilForm
+from django.contrib import messages
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import PerfilForm
+from .models import Profile
+import cloudinary.uploader
+
 
 def home(request):
     return render(request, 'account/home.html')
-
-# Vista para el login personalizado
-def custom_login(request):
-    if request.method == 'POST':
-        # 1) Pasar request y data para que AuthenticationForm valide
-        form = CustomLoginForm(request, data=request.POST)
-        if form.is_valid():
-            # 2) get_user() devuelve el User autenticado
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
-        # 3) si falla, re-render con error
-        form.add_error(None, 'El correo o la contraseña no son correctos.')
-    else:
-        # Siempre pasar request a AuthenticationForm
-        form = CustomLoginForm(request)
-
-    return render(request, 'account/login.html', {'form': form})
 
 @login_required
 def perfil_usuario(request):
     return render(request, 'account/perfil.html')
 
-
-# Vista para editar perfil y cambiar contraseña
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
         form = PerfilForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
+
+            # Cambiar contraseña si se proporcionó
             password1 = form.cleaned_data.get('password1')
             if password1:
-                user.set_password(password1)  # Cambiar la contraseña
+                user.set_password(password1)
+
             user.save()
-            form.save()
-            update_session_auth_hash(request, user)  # Mantener al usuario autenticado después de cambiar la contraseña
-            return redirect('perfil')  # Redirigir al perfil después de editarlo
+
+            # Procesar foto de perfil solo si hay archivo válido
+            foto = form.cleaned_data.get('foto')
+            if foto and foto.size:
+                profile, _ = Profile.objects.get_or_create(user=user)
+                upload_result = cloudinary.uploader.upload(foto)
+                profile.foto = upload_result.get('secure_url', '')
+                profile.save()
+
+            update_session_auth_hash(request, user)  # mantener sesión activa tras cambio de contraseña
+            return redirect('perfil')
     else:
         form = PerfilForm(instance=request.user)
-    
+
     return render(request, 'account/editar_perfil.html', {'form': form})
 
+@login_required
+def eliminar_cuenta(request):
+    if request.method == 'POST':
+        user = request.user
+        email = user.email
+        username = user.username
+
+        # Enviar correo notificando
+        send_mail(
+            subject='Cuenta eliminada',
+            message=f'Hola {username}, tu cuenta en ClubDelGranGusano ha sido eliminada.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=True,
+        )
+
+        user.delete()
+        logout(request)
+        return redirect('home')
+
+    # Si es GET, redirige a perfil
+    return redirect('perfil')

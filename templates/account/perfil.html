@@ -1,26 +1,58 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Perfil de Usuario</title>
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
-</head>
-<body>
-    <h1>Perfil de {{ user.first_name }}</h1>
 
-    <div class="perfil-container">
-        {% if user.profile.foto %}
-            <img src="{{ user.profile.foto.url }}" alt="Foto de perfil" class="foto-perfil">
-        {% else %}
-            <img src="{% static 'img/default-user.png' %}" alt="Foto por defecto" class="foto-perfil">
-        {% endif %}
-        <h2>Información del Usuario</h2>
-        <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
-        <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
-        <a href="{% url 'editar_perfil' %}">Editar Perfil</a> 
+{% block title %}Perfil de {{ user.first_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+<style>
+.perfil-acciones {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.perfil-acciones a, .perfil-acciones form {
+    display: inline-block; /* o quitar esta línea si no quieres cambiar */
+}
+.btn-eliminar {
+    color: white;
+    background-color: red;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="perfil-page">
+  <h1>Perfil de {{ user.first_name }}</h1>
+
+  <div class="perfil-container">
+    {% if user.profile.foto %}
+      <img src="{{ user.profile.foto }}" alt="Foto de perfil" class="foto-perfil">
+    {% else %}
+      <img src="{% static 'img/default-user.png' %}" alt="Foto por defecto" class="foto-perfil">
+    {% endif %}
+
+    <h2>Información del Usuario</h2>
+    <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+    <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
+
+    <div class="perfil-acciones">
+      <a href="{% url 'editar_perfil' %}">Editar Perfil</a>
+
+      <form method="POST" action="{% url 'eliminar_cuenta' %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
+        {% csrf_token %}
+        <button type="submit" class="btn-eliminar">Eliminar Cuenta</button>
+      </form>
     </div>
+  </div>
 
-    <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
-</body>
-</html>
+  <p><a href="{% url 'home' %}">Volver al Inicio</a></p>
+</div>
+{% endblock %}
