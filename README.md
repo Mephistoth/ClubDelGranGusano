@@ -30,5 +30,5 @@ La lógica del backend está separada en aplicaciones independientes y reutiliza
 ---
 
 ### 📬 Contacto
-* 💼 **LinkedIn:** [Felipe Soto](https://linkedin.com)
+* 💼 **LinkedIn:** [Felipe Soto](https://www.linkedin.com/in/felipe-soto-908077369/)
 * 📧 **Email:** felipeignacio28soto@gmail.com
